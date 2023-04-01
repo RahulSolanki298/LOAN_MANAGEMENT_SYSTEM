@@ -1,0 +1,85 @@
+﻿@model IEnumerable<website.Models.CompanyBranchDetail>
+@{
+    Layout = null;
+}
+<p>
+    @Html.ActionLink("Create New", "CreateBranch")
+</p>
+
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Branch List</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>SrNo.</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActivated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CompanyBranchType)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int Index = 1;}
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@(Index++)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActivated)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanyBranchType)
+                        </td>
+                        <td>
+                            <a id="btnEdit" href='@Url.Action("CreateBranch", "Branch",new {@id=item.Id})'><i class="fa fa-pencil"></i></a>
+                            <button id="btnDelete" onclick="DeleteBranch(@item.Id)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>SrNo.</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActivated)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CompanyBranchType)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#example1").dataTable();
+    });
+</script>

@@ -1,0 +1,141 @@
+﻿@model website.Models.CompanyBranchDetail
+
+@{
+    ViewBag.Title = "CreateBranch";
+}
+
+<style>
+    textarea {
+        resize: none;
+    }
+</style>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header">
+                    <h3 class="box-title">@( Model.Id > 0 ? "Edit Branch" : "Create Branch" ) </h3>
+
+                    @{
+                        if (@TempData["Success"] != null)
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6 pull-right">
+                                    <div class="box-body">
+                                        <div class="alert alert-success alert-dismissable">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                            <h4>	<i class="icon fa fa-check"></i> Alert!</h4>
+                                            Success alert preview. This alert is dismissable.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        if (@TempData["Error"] != null)
+                        {
+                            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                            <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+                            <script type="text/javascript">
+            toastr.success(@TempData["Error"], 'Fail', {timeOut:300});
+                            </script>
+                        }
+                    }
+
+
+                </div>
+                <div class="box-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.SubTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.SubTitle, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="Description">Certificate</label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.Certificate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Certificate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="Description">Company Logo</label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.CompanyLogo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyLogo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="Description">Company RegisterDate</label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.CompanyRegisterDate, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyRegisterDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" for="Description">Is Activated</label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.IsActivated, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.IsActivated, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <label class="control-label col-md-2" for="Description"> Branch Type</label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.CompanyBranchType, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyBranchType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Save" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div><!-- /.box-body -->
+            </div>
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+
+        </div>
+    </div>
+</section>
