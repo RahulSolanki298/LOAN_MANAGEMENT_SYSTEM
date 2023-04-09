@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 using website.Dto;
 using website.Interface;
@@ -49,19 +53,44 @@ namespace website.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBranch(CompanyBranchDetail companyBranchDetail)
+        public ActionResult CreateBranch(CompanyBranchDetail companyBranchDetail, IEnumerable<HttpPostedFileBase> files)
         {
             try
             {
-                var response = _branchRepo.SaveBranchDetail(companyBranchDetail);
-                TempData["Success"] = "Branch successfully saved.";
+                if (ModelState.IsValid)
+                {
+                    int index = 1;
+                    foreach (var file in files)
+                    {
+                        if (file.ContentLength > 0)
+                        {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                            file.SaveAs(path);
+                            if (index == 1)
+                            {
+                                companyBranchDetail.Certificate = fileName;
+                            }
+                            if (index == 2)
+                            {
+                                companyBranchDetail.CompanyLogo = fileName;
+                            }
+                        }
+                        index++;
+                    }
 
-                return RedirectToAction("CreateBranch");
+                    var response = _branchRepo.SaveBranchDetail(companyBranchDetail);
+                    TempData["Success"] = "Branch successfully saved.";
+
+                    return RedirectToAction("CreateBranch");
+                }
+                TempData["Error"] = "Please enter require fields.";
+                return View();
+
             }
             catch (System.Exception ex)
             {
-                ViewBag.Error = $"Exception : {ex.Message}";
-                TempData["Error"] = "Branch successfully saved.";
+                TempData["Error"] = $"Branch could not be added..Error is {ex.Message}";
                 return View();
             }
         }
@@ -84,10 +113,17 @@ namespace website.Controllers
         {
             try
             {
-                var response = _branchRepo.SaveBranchAdmin(branchAdmin);
+                ViewBag.BranchList = _branchRepo.GetBranchList().Select(x => new { x.Id, x.Title }).ToList();
 
-                TempData["Success"] = "Branch admin successfully saved.";
-                return RedirectToAction("CreateBranchAdmin");
+                if (ModelState.IsValid)
+                {
+                    var response = _branchRepo.SaveBranchAdmin(branchAdmin);
+
+                    TempData["Success"] = "Branch admin successfully saved.";
+                    return RedirectToAction("CreateBranchAdmin");
+                }
+                TempData["Error"] = "Please enter require fields.";
+                return View();
 
             }
             catch (System.Exception ex)
@@ -96,7 +132,6 @@ namespace website.Controllers
                 return View();
             }
         }
-
 
     }
 }

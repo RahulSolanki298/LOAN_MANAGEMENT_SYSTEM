@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var UserId = 0;
+    var AddressId = 0;
+    if (@ViewBag.UserId != null) { UserId = Convert.ToInt32(ViewBag.UserId); }
+}
+
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Customer Registration
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Customer</a></li>
+        <li class="active">Customer Registration</li>
+    </ol>
+</section>
+
+<div class="row">
+    <div class="col-xs-12">
+        <br />
+        <br />
+        <input type="hidden" value="@(UserId)" id="UserId" />
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="nav nav-pills">
+                        <li><button id="btnPDForm" class="btn btn-primary btn-outline-primary">Personal Details</button></li>
+                        <li><button id="btnAddress" class="btn btn-outline-primary" @(UserId > 0 ? "" : "disabled")>Address Details</button></li>
+                        <li><button id="btnDocumention" class="btn btn-outline-primary" @(UserId > 0 ? "" : "disabled")>Documentation</button></li>
+                        <li><button id="btnAccountDetails" class="btn btn-outline-primary" @(UserId > 0 ? "" : "disabled")>Account Details</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="customerForm">
+            </div>
+        </section>
+
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        $(document).ready(function () {
+             showCustomerRegistion();
+
+            $("#btnPDForm").click(function () {
+                debugger;
+                $.ajax({
+                    url: "@Url.Action("CreateRegister", "CustomerRegistration", new { id = @UserId })",
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        $("#btnDocumention").removeClass("btn-primary");
+                        $("#btnAddress").removeClass("btn-primary");
+                        $("#btnAccountDetails").removeClass("btn-primary");
+                        $("#btnPDForm").addClass("btn-primary");
+                        $("#customerForm").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                        alert(xhr);
+                    }
+                });
+            });
+
+            $("#btnAddress").click(function () {
+                debugger;
+                $.ajax({
+                    url: "@Url.Action("CreateAddressDetails", "CustomerRegistration", new { userId=UserId })",
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        $("#btnDocumention").removeClass("btn-primary");
+                        $("#btnAccountDetails").removeClass("btn-primary");
+                        $("#btnPDForm").removeClass("btn-primary");
+                        $("#btnAddress").addClass("btn-primary");
+
+                        $("#customerForm").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                        alert(xhr);
+                    }
+                });
+            });
+
+            $("#btnDocumention").click(function () {
+                debugger;
+                $.ajax({
+                    url: "@Url.Action("CreateDocumentation", "CustomerRegistration", new { userId=UserId })",
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        $("#btnPDForm").removeClass("btn-primary");
+                        $("#btnAddress").removeClass("btn-primary");
+                        $("#btnDocumention").addClass("btn-primary");
+                        $("#btnAccountDetails").removeClass("btn-primary");
+
+                        $("#customerForm").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                        alert(xhr);
+                    }
+                });
+
+            });
+
+            $("#btnAccountDetails").click(function () {
+                    debugger;
+                $.ajax({
+                    url: "@Url.Action("CreateAccountDetails", "CustomerRegistration", new { userId=UserId })",
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        $("#btnPDForm").removeClass("btn-primary");
+                        $("#btnAddress").removeClass("btn-primary");
+                        $("#btnDocumention").removeClass("btn-primary");
+                        $("#btnAccountDetails").addClass("btn-primary");
+
+                        $("#customerForm").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                        alert(xhr);
+                    }
+                });
+            });
+
+            });
+
+
+
+        function showCustomerRegistion() {
+            debugger;
+            $.get("@Url.Action("CreateRegister", "CustomerRegistration", new { id = @UserId })", function (data) {
+                $("#customerForm").html(data);
+            });
+        }
+
+
+    </script>
+
+}

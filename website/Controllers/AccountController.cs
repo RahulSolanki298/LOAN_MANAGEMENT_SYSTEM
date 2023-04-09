@@ -1,19 +1,13 @@
-﻿using System.Web.Mvc;
-using website.Dto;
-using website.Helpers;
-using website.Interface;
-using System.Web.Security;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Web.SessionState;
-using System.Web.Configuration;
-using System.Web;
-using System;
-using System.Net;
+﻿using System;
 using System.Collections.Specialized;
-using Microsoft.Ajax.Utilities;
-using static System.Net.WebRequestMethods;
+using System.Net;
 using System.Net.Mail;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
+using System.Web.SessionState;
+using website.Dto;
+using website.Interface;
 
 namespace website.Controllers
 {
@@ -83,25 +77,32 @@ namespace website.Controllers
         [HttpPost]
         public ActionResult Verify(string otp)
         {
-            if (Session["OTP"] != null && Session["NameOfAdmin"] != null)
+            try
             {
-                var otpNumber = Convert.ToInt32(Session["OTP"]);
-                var NameOfAdmin = Session["NameOfAdmin"];
-
-                if (otpNumber == Convert.ToInt32(otp))
+                if (Session["OTP"] != null && Session["NameOfAdmin"] != null)
                 {
-                    FormsAuthentication.SetAuthCookie(NameOfAdmin.ToString(), false);
-                    return RedirectToAction("Index", "Home");
+                    var otpNumber = Convert.ToInt32(Session["OTP"]);
+                    var NameOfAdmin = Session["NameOfAdmin"];
 
+                    if (otpNumber == Convert.ToInt32(otp))
+                    {
+                        FormsAuthentication.SetAuthCookie(NameOfAdmin.ToString(), false);
+                        return RedirectToAction("Index", "Home");
+
+                    }
+                    ViewBag.Message = "Wrong otp. Please try agaign.";
+                    return View();
                 }
-                ViewBag.Message = "Wrong otp. Please try agaign.";
-                return View();
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
-            else
+            catch (Exception)
             {
+
                 return RedirectToAction("Index");
             }
-
         }
 
         private string sendSMS(string number, int otp)
@@ -145,12 +146,11 @@ namespace website.Controllers
             }
         }
 
-
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
             Session.Abandon();
-            return RedirectToAction("Index", "Account");
+            return View();
         }
     }
 }

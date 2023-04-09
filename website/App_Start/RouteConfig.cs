@@ -9,10 +9,13 @@ namespace website
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+
+            
+
             //routes.MapRoute(
-            //    name: "Branch",
-            //    url: "{controller}/{action}/{id}",
-            //    defaults: new { controller = "Branch", action = "Index", id = UrlParameter.Optional }
+            //    name: "Customer",
+            //    url: "{Customer}/{Index}/{id}",
+            //    defaults: new { controller = "Customer", action = "Index", id = UrlParameter.Optional }
             //);
 
             routes.MapRoute(

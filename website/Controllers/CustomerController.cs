@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
+using website.Dto;
 using website.Helpers;
 using website.Interface;
 using website.Models;
 
 namespace website.Controllers
 {
-    //[Authorize(Roles= "Admin,BranchAdmin")]
+    [Authorize]
     public class CustomerController : Controller
     {
         public readonly ICustomerRepository _customerRepo;
@@ -35,7 +36,7 @@ namespace website.Controllers
                 var response = _customerRepo.GetCustomerPrimaryData(id);
                 return View(response);
             }
-            return View(new ApplicationCustomer());
+            return View(new CustomerRegistrationDTO());
         }
 
         public ActionResult ActivatedCustomerList()

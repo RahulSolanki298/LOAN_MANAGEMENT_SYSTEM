@@ -1,62 +1,25 @@
-﻿@model website.Dto.BranchAdminRegistrationDTO
+﻿@model website.Dto.CustomerRegistrationDTO
 
 @{
-    ViewBag.Title = "CreateBranchAdmin";
+    ViewData["Title"] = "Index";
+    Layout = null;
 }
 
-@{
-    if (@TempData["Success"] != null)
-    {
-        <div class="row">
-            <div class="col-md-6">
-            </div>
-            <div class="col-md-6 pull-right">
-                <div class="box-body">
-                    <div class="alert alert-success alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h4>	<i class="icon fa fa-check"></i> Alert!</h4>
-                        Success alert preview. This alert is dismissable.
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-    if (@TempData["Error"] != null)
-    {
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-        <script type="text/javascript">
-            toastr.success(@TempData["Error"], 'Fail', {timeOut:300});
-        </script>
-    }
-}
 <section class="content">
     <div class="row">
         <div class="col-md-12">
             <div class="box box-info">
                 <div class="box-header">
-                    <h3 class="box-title">@( Model == null ? "Edit Branch Admin" : "Create Branch Admin" ) </h3>
+                    <h3 class="box-title">@( Model == null ? "Edit Customer" : "Create Customer" ) </h3>
                 </div>
                 <div class="box-body">
-
                     @using (Html.BeginForm())
                     {
                         @Html.AntiForgeryToken()
 
                         <div class="form-horizontal">
-                            <hr />
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.HiddenFor(model => model.Id)
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-6">
-                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control text-box single-line" } })
-                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
 
                             <div class="form-group">
                                 @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -85,7 +48,11 @@
                             <div class="form-group">
                                 @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-6">
-                                    @Html.EditorFor(model => model.Gender, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.DropDownListFor(model => model.Gender, new List<SelectListItem>()
+                                    {
+                                        new SelectListItem(){ Text= "Male", Value = "Male"},
+                                        new SelectListItem(){ Text= "Female", Value = "Female"},
+                                    }, "Select Gender", new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -123,7 +90,7 @@
                             </div>
 
                             <div class="form-group">
-                                <lable class="control-label col-md-2"><b>Branch</b></lable>
+                                @Html.LabelFor(model => model.BranchName, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-6">
                                     @Html.DropDownListFor(m => m.BranchId, new SelectList(ViewBag.BranchList, "Id", "Title"), new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.BranchId, "", new { @class = "text-danger" })
@@ -147,10 +114,8 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Save" class="btn btn-default" />
-                                    <a href="##" class="btn btn-success" onClick="history.go(-1); return false;"> Back</a>
-
+                                <div class="col-md-offset-2 col-md-8">
+                                    <input type="submit" value="Save" class="btn btn-" />
                                 </div>
                             </div>
                         </div>

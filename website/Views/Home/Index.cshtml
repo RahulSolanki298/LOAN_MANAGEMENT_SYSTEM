@@ -38,38 +38,51 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SubTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Certificate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyLogo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyRegisterDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActivated)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyBranchType)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Certificate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyLogo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyRegisterDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActivated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyBranchType)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section Scripts
+    {
+    <script>
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+
+        window.onunload = function () { null };
+    </script>
+}

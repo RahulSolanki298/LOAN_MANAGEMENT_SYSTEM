@@ -2,6 +2,9 @@
 using System.Web.Optimization;
 using System.Web.Http;
 using System.Web.Routing;
+using System.Web;
+using System;
+using website.Helpers;
 
 namespace website
 {
@@ -15,6 +18,9 @@ namespace website
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            SeedData seed = new SeedData();
+            seed.checkIsSeed();
         }
     }
 }

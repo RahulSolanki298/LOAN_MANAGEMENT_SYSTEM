@@ -19,6 +19,7 @@ namespace website
             container.RegisterType<ICustomerRepository, CustomerRepository>();
             container.RegisterType<IAccountRepository, AccountRepository>();
             container.RegisterType<IBranchRepository, BranchRepository>();
+            container.RegisterType<ILoanManagerRepository, LoanManagerRepository>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

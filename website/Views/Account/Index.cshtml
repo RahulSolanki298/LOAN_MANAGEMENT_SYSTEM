@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input name="Password" id="Password" class="input100" placeholder="Password" />  @*autocomplete="off"*@
+                        <input type="password" name="Password" id="Password" class="input100" placeholder="Password" />  @*autocomplete="off"*@
 
                     </div>
 
@@ -102,6 +102,13 @@
     </script>
     <!--===============================================================================================-->
     <script src="~/Content/logintemplate/js/main.js"></script>
+    <script type="text/javascript" language="javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
 
 
 </body>

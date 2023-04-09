@@ -15,7 +15,7 @@
         <div class="col-md-12">
             <div class="box box-info">
                 <div class="box-header">
-                    <h3 class="box-title">@( Model.Id > 0 ? "Edit Branch" : "Create Branch" ) </h3>
+                    <h3 class="box-title">@( Model == null ? "Edit Branch" : "Create Branch" ) </h3>
 
                     @{
                         if (@TempData["Success"] != null)
@@ -49,7 +49,7 @@
 
                 </div>
                 <div class="box-body">
-                    @using (Html.BeginForm())
+                    @using (Html.BeginForm("CreateBranch", "Branch", FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
 
@@ -84,16 +84,17 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="Description">Certificate</label>
                                 <div class="col-md-6">
-                                    @Html.EditorFor(model => model.Certificate, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Certificate, "", new { @class = "text-danger" })
+                                    <input type="file" name="files" id="fileCerti" />
+                                    @*@Html.ValidationMessageFor(model => model.Certificate, "", new { @class = "text-danger" })*@
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-md-2" for="Description">Company Logo</label>
                                 <div class="col-md-6">
-                                    @Html.EditorFor(model => model.CompanyLogo, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.CompanyLogo, "", new { @class = "text-danger" })
+                                    <input type="file" name="files" id="fileLogo" />
+                                    @*@Html.EditorFor(model => model.CompanyLogo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CompanyLogo, "", new { @class = "text-danger" })*@
                                 </div>
                             </div>
 
@@ -117,7 +118,15 @@
 
                                 <label class="control-label col-md-2" for="Description"> Branch Type</label>
                                 <div class="col-md-6">
-                                    @Html.EditorFor(model => model.CompanyBranchType, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.DropDownListFor(model => model.CompanyBranchType, new List<SelectListItem>()
+                                   {
+                                       new SelectListItem(){ Text= "MainBranch", Value = "MainBranch"},
+                                       new SelectListItem(){ Text= "SubBranch", Value = "SubBranch"},
+                                   }, "Select Gender", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CompanyBranchType, "", new { @class = "text-danger" })
+
+
+                                    @*@Html.EditorFor(model => model.CompanyBranchType, new { htmlAttributes = new { @class = "form-control" } })*@
                                     @Html.ValidationMessageFor(model => model.CompanyBranchType, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -125,6 +134,8 @@
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
                                     <input type="submit" value="Save" class="btn btn-default" />
+                                    <a href="##" class="btn btn-success" onClick="history.go(-1); return false;"> Back</a>
+
                                 </div>
                             </div>
                         </div>
