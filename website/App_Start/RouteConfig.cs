@@ -9,14 +9,22 @@ namespace website
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute(
+               "Customer", "customer", new { controller = "Customer", action = "Index", id = UrlParameter.Optional }
+           );
 
-            
+            routes.MapRoute(
+               "ActivatedCustomerList", "activated-customers", new { controller = "Customer", action = "ActivatedCustomerList", id = UrlParameter.Optional }
+           );
 
-            //routes.MapRoute(
-            //    name: "Customer",
-            //    url: "{Customer}/{Index}/{id}",
-            //    defaults: new { controller = "Customer", action = "Index", id = UrlParameter.Optional }
-            //);
+            routes.MapRoute(
+               "Employee", "employee", new { controller = "Employee", action = "Index", id = UrlParameter.Optional }
+           );
+
+
+            routes.MapRoute(
+                "Dashboard", "home", new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
 
             routes.MapRoute(
                 name: "Default",

@@ -10,9 +10,10 @@ namespace website.Interface
         DocumentationDTO GetDocumentation(int userId);
         List<CustomerRegistrationDTO> GetActiveCustomers();
         List<CustomerRegistrationDTO> GetNonActiveCustomers();
-        bool SaveCustomer(CustomerRegistrationDTO customer);
-        bool SaveCustomerAddress(AddressMasterDto address);
-        bool SaveDocumentation(DocumentationDTO documenation);
+        int SaveCustomer(CustomerRegistrationDTO customer);
+        int SaveCustomerAddress(AddressMasterDto address);
+        int SaveDocumentation(DocumentationDTO documenation);
         bool DeleteCustomer(int id);
+        DashboardDTO Dashboard();
     }
 }

@@ -25,7 +25,6 @@
 <section class="content-header">
     <h1>
         Customer list
-        <small>Control panel</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -60,6 +59,26 @@
 </div>
 
 
+<div id="LoanDetails"
+     class="modal fade bd-example-modal-lg"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+
+</div>
+
+
+<div id="GenerateSectionLatter"
+     class="modal fade bd-example-modal-lg"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+
+</div>
+
+
 @section Scripts
     {
 
@@ -78,7 +97,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
             showCustomerList();
+
             $("#btnCustomerApply").click(function () {
+                debugger;
                 $.get("LoanAppliedList", function (data) {
                     $("#btnCustomerPassed").removeClass("btn-primary");
                     $("#btnCustomerFailed").removeClass("btn-primary");
@@ -91,7 +112,7 @@
             });
 
             $("#btnCustomerPassed").click(function () {
-                $.get("LoanAppliedList", function (data) {
+                $.get("LoanPassedList", function (data) {
                     $("#btnCustomerPassed").addClass("btn-primary");
                     $("#btnCustomerFailed").removeClass("btn-primary");
                     $("#btnCustomerActive").removeClass("btn-primary");
@@ -103,7 +124,7 @@
             });
 
             $("#btnCustomerFailed").click(function () {
-                $.get("LoanAppliedList", function (data) {
+                $.get("CustomerFailed", function (data) {
                     $("#btnCustomerPassed").removeClass("btn-primary");
                     $("#btnCustomerFailed").addClass("btn-primary");
                     $("#btnCustomerActive").removeClass("btn-primary");
@@ -115,7 +136,7 @@
             });
 
             $("#btnCustomerActive").click(function () {
-                $.get("LoanAppliedList", function (data) {
+                $.get("CustomerActive", function (data) {
                     $("#btnCustomerPassed").removeClass("btn-primary");
                     $("#btnCustomerFailed").removeClass("btn-primary");
                     $("#btnCustomerActive").addClass("btn-primary");
@@ -127,7 +148,7 @@
             });
 
             $("#btnCustomerCancel").click(function () {
-                $.get("LoanAppliedList", function (data) {
+                $.get("CustomerCancel", function (data) {
                     $("#btnCustomerPassed").removeClass("btn-primary");
                     $("#btnCustomerFailed").removeClass("btn-primary");
                     $("#btnCustomerActive").removeClass("btn-primary");
@@ -139,7 +160,7 @@
             });
 
             $("#btnCustomerComplated").click(function () {
-                $.get("LoanAppliedList", function (data) {
+                $.get("CustomerComplated", function (data) {
                     $("#btnCustomerPassed").removeClass("btn-primary");
                     $("#btnCustomerFailed").removeClass("btn-primary");
                     $("#btnCustomerActive").removeClass("btn-primary");
@@ -153,9 +174,35 @@
         });
 
         function showCustomerList() {
-            $.get("LoanAppliedList", function (data) {
+            $.get("@Url.Action("LoanAppliedList")", function (data) {
                 debugger;
                 $("#customerLoanList").html(data);
+            });
+        }
+
+        function CreateSectionLatter(Id) {
+            $.ajax({
+                url: '/LoanManager/SectionLetter?id=' + Id,
+                type: 'Get',
+                success: function (result) {
+                    $("#GenerateSectionLatter").html(result);
+                    $("#GenerateSectionLatter").modal('show');
+                }
+            });
+        }
+
+        function PassRequest(id, status) {
+            $.ajax({
+                url: "/LoanManager/PassLoanApplication?id=" + id + "&status=" + status,
+                type: 'PUT',
+                success: function (response) {
+                    Swal.fire(
+                        'Passed',
+                        response,
+                        'success'
+                    );
+                    showCustomerList();
+                }
             });
         }
 
@@ -171,7 +218,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'DeleteCustomer?id=' + Id,
+                        url: '/Customer/DeleteCustomer?id=' + Id,
                         type: 'DELETE',
                         success: function (result) {
                             Swal.fire(
@@ -184,6 +231,19 @@
                     });
                 }
             })
+        }
+
+        function SectionLetter(Id) {
+
+            $.ajax({
+                url: '/LoanManager/SectionLetter?id=' + Id,
+                type: 'Get',
+                success: function (result) {
+                    $("#LoanDetails").html(result);
+                    $("#LoanDetails").modal('show');
+                }
+            });
+
         }
     </script>
 }

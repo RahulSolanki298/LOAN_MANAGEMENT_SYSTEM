@@ -132,6 +132,13 @@
                 });
             });
 
+            $("#customerForm").on("click", ".clsImage", function () {
+                $("#customerForm #clsImageFocas").modal("show");
+                $("#clsImageFocas img").attr("src", this.src);
+                $("#clsImageFocas #ImageName").text(this.title);
+
+            });
+
             });
 
 

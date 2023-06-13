@@ -7,18 +7,19 @@ namespace website.APIControllers
 {
     public class AccountController : ApiController
     {
-        public readonly IAccountRepository _accountRepository;
+        private readonly IAccountRepository _accountRepository=null;
 
         public AccountController(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
         }
 
+        [Route("api/Account/Login")]
         [HttpPost]
-        public ApplicationUserDTO Login(LoginDTO login)
+        public IHttpActionResult Login(LoginDTO login)
         {
             var result = _accountRepository.LoginProcess(login);
-            return result;
+            return Ok(result);
         }
     }
 }

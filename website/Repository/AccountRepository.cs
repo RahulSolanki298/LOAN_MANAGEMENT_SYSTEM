@@ -24,7 +24,7 @@ namespace website.Repository
             con.Open();
 
             var user = SqlMapper.Query<ApplicationUserDTO>(
-                              con, "GetUserData").Where(x=>x.UserName==loginDT.UserName).FirstOrDefault();
+                              con, "GetUserData").Where(x => x.UserName == loginDT.UserName).FirstOrDefault();
 
             con.Close();
 

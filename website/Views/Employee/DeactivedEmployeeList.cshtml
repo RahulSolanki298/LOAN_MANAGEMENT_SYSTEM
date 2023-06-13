@@ -1,0 +1,69 @@
+﻿@model IEnumerable<website.Dto.EmployeeRegistrationDTO>
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">NonActived-Employee List</h3>
+        <br />
+        <span>
+            <a id="btnCustomerRegister" href='@Url.Action("EmployeeIndex", "Employee")'>Click here</a>
+        </span>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th width="5px">SrNo</th>
+                    <th>Employee Name</th>
+                    <th>MobileNo</th>
+                    <th>Branch Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var index = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    {
+                        index = index + 1;
+                    }
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.FirstName @item.LastName</td>
+                        <td>@Html.DisplayFor(modelItem => item.MobileNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.BranchName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td>
+                            <a id="btnEdit" href='@Url.Action("EmployeeIndex", "Employee",new {@id=item.Id})'><i class="fa fa-pencil"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th width="5px">SrNo</th>
+                    <th>Employee Name</th>
+                    <th>MobileNo</th>
+                    <th>Branch Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+<script type="text/javascript">
+    $(function () {
+        $("#example1").dataTable();
+    });
+
+
+</script>

@@ -1,30 +1,37 @@
-﻿namespace website.Dto
+﻿using System;
+
+namespace website.Dto
 {
     public class CustomerLoanManagerDTO
     {
-       public string Id  { get; set; }
-       public string UserId  { get; set; }
-       public string BranchId  { get; set; }
-       public string LoanApplyAmountDate  { get; set; }
-       public string LoanApplyAmount  { get; set; }
-       public string SectionAmountDate  { get; set; }
-       public string SectionAmount  { get; set; }
-       public string CreatedById  { get; set; }
-       public string CreatedDate  { get; set; }
-       public string UpdateById  { get; set; }
-       public string UpdatedDate  { get; set; }
-       public string DeletedById  { get; set; }
-       public string DeletedDate  { get; set; }
-       public string IsNoOfDays  { get; set; }
-       public string IsNoOfWeeks  { get; set; }
-       public string IsNoOfMonths  { get; set; }
-       public string IsNoOfYear  { get; set; }
-       public string NoOfDays  { get; set; }
-       public string NoOfWeeks  { get; set; }
-       public string NoOfMonths  { get; set; }
-       public string NoOfYears  { get; set; }
-       public string LoanIntrest  { get; set; }
-       public string LoanAccNo  { get; set; }
-       public string LoanDate  { get; set; }
+        public int Id { get; set; }
+        public int? UserId { get; set; }
+        public string CustomerName { get; set; }
+        public int? BranchId { get; set; }
+        public string BranchName { get; set; }
+        public DateTime? LoanApplyAmountDate { get; set; }
+        public decimal? LoanApplyAmount { get; set; }
+        public decimal? LoanNetAmount { get; set; }
+        public decimal? LoanEMI { get; set; }
+        public DateTime? SectionAmountDate { get; set; }
+        public decimal? SectionAmount { get; set; }
+        public int? CreatedById { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public int? UpdateById { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? DeletedById { get; set; }
+        public DateTime? DeletedDate { get; set; }
+        public bool? IsNoOfDays { get; set; }
+        public bool? IsNoOfWeeks { get; set; }
+        public bool? IsNoOfMonths { get; set; }
+        public bool? IsNoOfYear { get; set; }
+        public string NoOfDays { get; set; }
+        public string NoOfWeeks { get; set; }
+        public string NoOfMonths { get; set; }
+        public string NoOfYears { get; set; }
+        public decimal? LoanIntrest { get; set; }
+        public string LoanAccNo { get; set; }
+        public string LoanNo { get; set; }
+        public DateTime? LoanDate { get; set; }
     }
 }

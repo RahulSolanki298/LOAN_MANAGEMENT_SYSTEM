@@ -20,28 +20,16 @@
                     @{
                         if (@TempData["Success"] != null)
                         {
-                            <div class="row">
-                                <div class="col-md-6">
-                                </div>
-                                <div class="col-md-6 pull-right">
-                                    <div class="box-body">
-                                        <div class="alert alert-success alert-dismissable">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                            <h4>	<i class="icon fa fa-check"></i> Alert!</h4>
-                                            Success alert preview. This alert is dismissable.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <script type="text/javascript">
+                                alert("@TempData["Error"]");
+                            </script>
+
                         }
 
                         if (@TempData["Error"] != null)
                         {
-                            <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                            <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
                             <script type="text/javascript">
-            toastr.success(@TempData["Error"], 'Fail', {timeOut:300});
+                                alert(""@TempData["Error"]");
                             </script>
                         }
                     }
@@ -93,8 +81,6 @@
                                 <label class="control-label col-md-2" for="Description">Company Logo</label>
                                 <div class="col-md-6">
                                     <input type="file" name="files" id="fileLogo" />
-                                    @*@Html.EditorFor(model => model.CompanyLogo, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CompanyLogo, "", new { @class = "text-danger" })*@
                                 </div>
                             </div>
 
@@ -122,11 +108,7 @@
                                    {
                                        new SelectListItem(){ Text= "MainBranch", Value = "MainBranch"},
                                        new SelectListItem(){ Text= "SubBranch", Value = "SubBranch"},
-                                   }, "Select Gender", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.CompanyBranchType, "", new { @class = "text-danger" })
-
-
-                                    @*@Html.EditorFor(model => model.CompanyBranchType, new { htmlAttributes = new { @class = "form-control" } })*@
+                                   }, "Select Branch", new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.CompanyBranchType, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -140,7 +122,7 @@
                             </div>
                         </div>
                     }
-                </div><!-- /.box-body -->
+                </div>
             </div>
 
             <div>

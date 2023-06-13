@@ -1,137 +1,172 @@
 ﻿@model website.Dto.DocumentationDTO
-
+@using website.Helpers;
 @{
     ViewData["Title"] = "Index";
     Layout = null;
+
+    string noImgPath = "Content/Images/NoImage.jpg";
+    string websitePath = APIPath.Api_Path;
 }
 
-@using (Html.BeginForm("CreateDocumentation",
-    "CustomerRegistration", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header">
+                    <h3 class="box-title">Documentation : </h3>
+                </div>
+                <div class="box-body">
+                    @using (Html.BeginForm("CreateDocumentation",
+                        "CustomerRegistration", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>DocumentationDTO</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group" style="display:none;">
+                                @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AadharCardNo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.AadharCardNo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AadharCardNo, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AadharCardNo, htmlAttributes: new { @class = "control-label col-md-2" })
 
-        <div class="form-group">
-            <label class="control-label col-md-2">AadharCard Image</label>
-            <div class="col-md-10">
-                <input type="file" name="AadharCardImagePathFile" id="AadharCardImagePathFile" />
-                @if (Model != null)
-                {
-                    <input type="hidden" id="AadharCardImagePath" name="AadharCardImagePath" value="@Model.AadharCardImagePath" />
-                }
-                @Html.ValidationMessageFor(model => model.AadharCardImagePath, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.AadharCardNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.AadharCardNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PancardNo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PancardNo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PancardNo, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2">Pancard Image</label><span><img src="~/App_Data/Pancards/@(Model != null ? Model.PancardImagePath : "~/Content/Images/NoImage.jpg")" style="width:20%;" /></span>
-            @*<img src="~/Content/Images/NoImage.jpg" />*@
-            <div class="col-md-10">
-                <input type="file" name="PancardImagePathFile" id="PancardImagePathFile" />
-                @if (Model != null)
-                {
-                    <input type="hidden" id="PancardImagePath" name="PancardImagePath" value="@Model.PancardImagePath" />
-                }
-                @Html.ValidationMessageFor(model => model.PancardImagePathFile, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">AadharCard Image</label>
+                                <span><img src="@websitePath@(Model == null ? noImgPath : "Documentation/AadharCards/"+Model.AadharCardImagePath)" title="Aadhar Image" class="clsImage" style="width:2%;" /></span>
+                                <div class="col-md-6">
+                                    <input type="file" name="AadharCardImagePathFile" id="AadharCardImagePathFile" />
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="AadharCardImagePath" name="AadharCardImagePath" value="@Model.AadharCardImagePath" />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.AadharCardImagePath, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PancardNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.PancardNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PancardNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.BankAccountNo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.BankAccountNo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BankAccountNo, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                <label class="control-label col-md-2">Pancard Image</label><span><img src="@websitePath@(Model == null ? noImgPath : "Documentation/Pancards/"+Model.PancardImagePath)" title="Pancard Image" class="clsImage" style="width:2%;" /></span>
+                                <div class="col-md-6">
+                                    <input type="file" name="PancardImagePathFile" id="PancardImagePathFile" />
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="PancardImagePath" name="PancardImagePath" value="@Model.PancardImagePath" />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.PancardImagePathFile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.IFSCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.IFSCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.IFSCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-2">PassBook Image</label>
-            <div class="col-md-10">
-                <input type="file" name="PassBookImgPathFile" id="PassBookImgPathFile" />
-                @if (Model != null)
-                {
-                    <input type="hidden" id="PassBookImgPath" name="PassBookImgPath" value="@(Model.PassBookImgPath != null ? Model.PassBookImgPath : null)" />
-                }
-                @Html.ValidationMessageFor(model => model.PassBookImgPath, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BankAccountNo, htmlAttributes: new { @class = "control-label col-md-2" })
 
-        <div class="form-group">
-            <label class="control-label col-md-2">CheckBooK Image</label>
-            <div class="col-md-10">
-                <input type="file" name="CheckBooKImgPathFile" id="CheckBooKImgPathFile" />
-                @if (Model != null)
-                {
-                    <input type="hidden" id="CheckBooKImgPath" name="CheckBooKImgPath" value="@(Model.CheckBooKImgPath != null ? Model.CheckBooKImgPath : null)" />
-                }
-                @Html.ValidationMessageFor(model => model.CheckBooKImgPath, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.BankAccountNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.BankAccountNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-2">Profile Image</label>
-            <div class="col-md-10">
-                <input type="file" name="ProfileImgPathFile" id="ProfileImgPathFile" />
-                @if (Model != null)
-                {
-                    <input type="hidden" id="ProfileImgPath" name="ProfileImgPath" value="@(Model.ProfileImgPath != null ? Model.ProfileImgPath : null)" />
-                }
-                @Html.ValidationMessageFor(model => model.ProfileImgPath, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.IFSCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.IFSCode, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.IFSCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                            <div class="form-group">
+                                <label class="control-label col-md-2">PassBook Image</label>
+                                <span><img src="@websitePath@(Model == null ? noImgPath : "Documentation/PassBooks/"+Model.PassBookImgPath)" title="Passbook Image" class="clsImage" style="width:2%;" /></span>
+                                <div class="col-md-6">
+                                    <input type="file" name="PassBookImgPathFile" id="PassBookImgPathFile" />
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="PassBookImgPath" name="PassBookImgPath" value="@(Model.PassBookImgPath != null ? Model.PassBookImgPath : null)" />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.PassBookImgPath, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">CheckBooK Image</label>
+                                <span><img src="@websitePath@(Model == null ? noImgPath : "Documentation/CheckBooks/"+Model.CheckBooKImgPath)" title="Checkbook Image" class="clsImage" style="width:2%;" /></span>
+
+                                <div class="col-md-6">
+                                    <input type="file" name="CheckBooKImgPathFile" id="CheckBooKImgPathFile" />
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="CheckBooKImgPath" name="CheckBooKImgPath" value="@(Model.CheckBooKImgPath != null ? Model.CheckBooKImgPath : null)" />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.CheckBooKImgPath, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Profile Image</label>
+                                <span><img src="@websitePath@(Model == null ? noImgPath : "Documentation/Profiles/"+Model.ProfileImgPath)" title="Profile Image" class="clsImage" style="width:2%;" /></span>
+
+                                <div class="col-md-6">
+                                    <input type="file" name="ProfileImgPathFile" id="ProfileImgPathFile" />
+                                    @if (Model != null)
+                                    {
+                                        <input type="hidden" id="ProfileImgPath" name="ProfileImgPath" value="@(Model.ProfileImgPath != null ? Model.ProfileImgPath : null)" />
+                                    }
+                                    @Html.ValidationMessageFor(model => model.ProfileImgPath, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-6">
+                                    <input type="submit" value="Save" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
             </div>
         </div>
     </div>
-}
+</section>
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+<div class="modal fade" id="clsImageFocas" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ImageName"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="@websitePath@noImgPath" width="100%" />
+            </div>
+        </div>
+    </div>
 </div>

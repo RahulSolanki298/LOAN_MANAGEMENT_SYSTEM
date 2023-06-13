@@ -1,0 +1,190 @@
+﻿@model IEnumerable<website.Dto.CustomerLoanManagerDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BranchId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BranchName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanApplyAmountDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanApplyAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanEMI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SectionAmountDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SectionAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedById)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdateById)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeletedById)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeletedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsNoOfDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsNoOfWeeks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsNoOfMonths)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsNoOfYear)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfWeeks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfMonths)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfYears)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanIntrest)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanAccNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BranchId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BranchName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanApplyAmountDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanApplyAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanEMI)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SectionAmountDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SectionAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedById)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdateById)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpdatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeletedById)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeletedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsNoOfDays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsNoOfWeeks)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsNoOfMonths)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsNoOfYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfDays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfWeeks)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfMonths)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOfYears)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanIntrest)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanAccNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoanDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

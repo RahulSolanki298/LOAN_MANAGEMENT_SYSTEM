@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.ModelBinding;
 using System.Web.Mvc;
 using website.Dto;
 using website.Interface;
@@ -53,30 +52,42 @@ namespace website.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBranch(CompanyBranchDetail companyBranchDetail, IEnumerable<HttpPostedFileBase> files)
+        public ActionResult CreateBranch(CompanyBranchDetail companyBranchDetail, 
+            IEnumerable<HttpPostedFileBase> files)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     int index = 1;
+
                     foreach (var file in files)
                     {
-                        if (file.ContentLength > 0)
+                        if (file != null)
                         {
-                            var fileName = Path.GetFileName(file.FileName);
-                            var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                            file.SaveAs(path);
-                            if (index == 1)
+                            if (file.ContentLength > 0)
                             {
-                                companyBranchDetail.Certificate = fileName;
+                                string subPath = "~/App_Data/uploads"; // Your code goes here
+
+                                bool exists = System.IO.Directory.Exists(Server.MapPath(subPath));
+
+                                if (!exists)
+                                    System.IO.Directory.CreateDirectory(Server.MapPath(subPath));
+
+                                var fileName = Path.GetFileName(file.FileName);
+                                var path = Path.Combine(Server.MapPath(subPath), fileName);
+                                file.SaveAs(path);
+                                if (index == 1)
+                                {
+                                    companyBranchDetail.Certificate = fileName;
+                                }
+                                if (index == 2)
+                                {
+                                    companyBranchDetail.CompanyLogo = fileName;
+                                }
                             }
-                            if (index == 2)
-                            {
-                                companyBranchDetail.CompanyLogo = fileName;
-                            }
+                            index++;
                         }
-                        index++;
                     }
 
                     var response = _branchRepo.SaveBranchDetail(companyBranchDetail);

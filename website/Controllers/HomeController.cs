@@ -1,13 +1,7 @@
-﻿using Dapper;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web.Mvc;
-using System.Web.SessionState;
-using website.Helpers;
 using website.Interface;
-using website.Models;
 
 namespace website.Controllers
 {
@@ -33,11 +27,11 @@ namespace website.Controllers
             connection();
             con.Open();
 
-            var companyAndBranch = SqlMapper.Query<CompanyBranchDetail>(
-                          con, "SP_CompanyAndBranchList").ToList();
+             var result=_customerRepository.Dashboard();
+
 
             con.Close();
-            return View(companyAndBranch);
+            return View(result);
         }
 
         public ActionResult customerList()

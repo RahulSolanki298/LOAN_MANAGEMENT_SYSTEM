@@ -2,7 +2,7 @@
 {
     public class APIConnection
     {
-        public static string ApiPath = "https://localhost:7250";
+        public static string ApiPath = "http://singhmutualnidhilimited.com";
 
         public static string BranchId = "BranchId";
         public static string BranchName = "BranchName";

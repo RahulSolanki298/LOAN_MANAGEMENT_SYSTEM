@@ -1,0 +1,172 @@
+﻿@model website.Dto.CustomerLoanManagerDTO
+
+@{
+    ViewBag.Title = "LoanApply";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box">
+
+
+
+    <div class="form-horizontal">
+        <h4>Loan Apply for customer</h4>
+        <hr />
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Account No</label>
+            <div class="col-md-6">
+                <input type="hidden" name="txtId" value="@Model.Id" class="form-control" />
+                <input type="hidden" name="txtUserId" value="@Model.UserId" class="form-control" />
+                <input type="text" name="txtLoanAccNo" value="@Model.LoanAccNo" readonly="readonly" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BranchId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <select id="branchId" class="form-control">
+                    <option value="0">Select Branch</option>
+                    @foreach (var item in ViewBag.BranchList)
+                    {
+                        <option value="@item.Id" @(item.Id == Model.BranchId ? "selected" : "")>@item.Title</option>
+                    }
+                </select>
+                <span class="errBranch text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LoanApplyAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <input type="text" name="txtloanApplyAmt" value="@Model.LoanApplyAmount" class="form-control" />
+                <span class="errLoanApplyAmt text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Loan with Intrest </label>
+            <div class="col-md-6">
+                <input type="text" name="txtLoanNetAmount" value="@Model.LoanNetAmount" class="form-control" />
+                <span class="errLoanNetAmt text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NoOfDays, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <input type="text" name="txtNoOfDays" value="@Model.NoOfDays" class="form-control" />
+                <span class="errNoOfDays text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LoanEMI, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <input type="text" name="txtLoanEMI" value="@Model.LoanEMI" class="form-control" />
+                <span class="errLoanEMI text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LoanIntrest, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <input type="text" name="txtLoanIntrest" value="@Model.LoanIntrest" class="form-control" />
+                <span class="errLoanIntrest text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-6">
+                <input type="submit" value="Loan Apply" id="btnSubmit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#btnSubmit").click(function () {
+
+                if (Validation() == false) {
+
+                    const formData = new FormData()
+                    formData.append('Id', $("input[name='txtId']").val());
+                    formData.append('UserId', $("input[name='txtUserId']").val());
+                    formData.append('LoanAccNo', $("input[name='txtLoanAccNo']").val());
+                    formData.append('BranchId', $("#branchId").val());
+                    formData.append('LoanApplyAmount', $("input[name='txtloanApplyAmt']").val());
+                    formData.append('LoanNetAmount', $("input[name='txtLoanNetAmount']").val());
+                    formData.append('NoOfDays', $("input[name='txtNoOfDays']").val());
+                    formData.append('LoanEMI', $("input[name='txtLoanEMI']").val());
+                    formData.append('LoanIntrest', $("input[name='txtLoanIntrest']").val());
+
+                    $.ajax({
+                        url: "/LoanManager/SubmitLoanApply",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        success: function (data) {
+                            alert(data);
+                        }
+                    });
+                } else { alert("Fail"); }
+            });
+
+            function Validation() {
+                var branchId = $("#branchId").val();
+                var loanApplyAmount = $("input[name='txtloanApplyAmt']").val();
+                var loanNetAmount = $("input[name='txtLoanNetAmount']").val();
+                var noOfDays = $("input[name='txtNoOfDays']").val();
+                var loanEMI = $("input[name='txtLoanEMI']").val();
+                var loanIntrest = $("input[name='txtLoanIntrest']").val();
+                var error = {};
+
+                if (branchId == null || branchId == undefined || branchId == 0) {
+                    $(".errBranch").text("please select branch");
+                    error.branchId = true;
+                }
+
+                if (loanApplyAmount == null || loanApplyAmount == undefined || loanApplyAmount == "") {
+                    $(".errLoanApplyAmt").text("please enter loan amount");
+                    error.loanApplyAmount = true;
+                }
+
+                if (loanNetAmount == null || loanNetAmount == undefined || loanNetAmount == "") {
+                    $(".errLoanNetAmt").text("please enter loan net-amount");
+                    error.loanNetAmount = true;
+                }
+
+                if (noOfDays == null || noOfDays == undefined || noOfDays == "") {
+                    $(".errNoOfDays").text("please enter no of days.")
+                    error.noOfDays = true;
+                }
+
+                if (loanEMI == null || loanEMI == undefined || loanEMI == "") {
+                    $(".errloanEMI").text("please enter loan emi");
+                    error.loanEMI = true;
+                }
+
+                if (loanIntrest == null || loanIntrest == undefined || loanIntrest == "") {
+                    $(".errloanIntrest").text("please enter loan intrest.");
+                    error.loanIntrest = true;
+                }
+
+                if (error.branchId == true || error.loanApplyAmount == true ||
+                    error.loanEMI == true || error.loanIntrest == true ||
+                    error.loanNetAmount == true || error.noOfDays == true) { return true; }
+
+                return false;
+            }
+
+
+
+        });
+
+
+    </script>
+}

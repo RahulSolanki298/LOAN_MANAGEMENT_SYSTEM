@@ -1,0 +1,81 @@
+﻿@model IEnumerable<website.Dto.CustomerLoanManagerDTO>
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+
+<div class="box">
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LoanAccNo)
+                    </th>
+                    <td>
+                        Loan Date
+                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BranchId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LoanApplyAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoOfDays)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LoanIntrest)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanAccNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BranchId)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanApplyAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoOfDays)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanIntrest)
+                        </td>
+                        <td>
+                            <button id="btnSectionLetter" title="Section Letter" onclick="SectionLetter(@item.Id)"><img src="~/Content/Images/chapter.png" width="15px"></img></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+<script type="text/javascript">
+    $(function () {
+        $("#example1").dataTable();
+    });
+
+
+</script>
+
+

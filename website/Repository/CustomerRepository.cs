@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using website.Dto;
+using website.Helpers;
 using website.Interface;
 
 namespace website.Repository
@@ -24,8 +25,57 @@ namespace website.Repository
 
         public bool DeleteCustomer(int id)
         {
-            throw new System.NotImplementedException();
+            connection();
+            con.Open();
+
+            var result = SqlMapper.Query<CustomerLoanManagerDTO>(
+                            con, $"select * from CustomerLoanManager where Id={id}").FirstOrDefault();
+
+            if (result == null)
+            {
+                con.Execute($"Delete FROM AppUserRole WHERE Id={id}");
+                con.Execute($"Delete FROM AddressMaster WHERE Id={id}");
+                con.Execute($"Delete FROM AppUserPrivateDetails WHERE Id={id}");
+                con.Execute($"Delete FROM AppUser WHERE Id={id}");
+                return true;
+            }
+
+            con.Close();
+            return false;
+
         }
+
+        public DashboardDTO Dashboard()
+        {
+            connection();
+            con.Open();
+
+            DashboardDTO dashboardDTO = new DashboardDTO();
+
+            dashboardDTO.ActiveClientNo = SqlMapper.Query<int>(
+                              con, $"select count(*) as ActiveClientNo from ApplicationCustomer where IsActive='1'").FirstOrDefault();
+
+
+            dashboardDTO.DeActiveClientNo = SqlMapper.Query<int>(
+                              con, $"select count(*) as DeActiveClientNo from ApplicationCustomer where IsActive='0'").FirstOrDefault();
+
+            dashboardDTO.TodayLoanApply = SqlMapper.Query<int>(
+                              con, $"select count(*) from CustomerLoanManager cms" +
+                              $" Inner join AppUserRole aur on cms.UserId = aur.UserId" +
+                              $" Inner join LoanStages ls on aur.RoleId = ls.Id" +
+                              $" where ls.Name='{LoanStages.Applied}'").FirstOrDefault();
+
+            dashboardDTO.ComplateLoan = SqlMapper.Query<int>(
+                              con, $"select count(*) from CustomerLoanCard where RepaymentDate='{DateTime.Now}'").FirstOrDefault();
+
+            dashboardDTO.CustomerLoanList = SqlMapper.Query<CustomerLoanCardDto>(
+                              con, $"select * from CustomerLoanCard where RepaymentDate='{DateTime.Now}'").ToList();
+
+            con.Close();
+
+            return dashboardDTO;
+        }
+
         #region Customer Primary Data
 
         public CustomerRegistrationDTO GetCustomerPrimaryData(int id)
@@ -67,7 +117,7 @@ namespace website.Repository
             return customers;
         }
 
-        public bool SaveCustomer(CustomerRegistrationDTO customer)
+        public int SaveCustomer(CustomerRegistrationDTO customer)
         {
             connection();
             con.Open();
@@ -99,11 +149,13 @@ namespace website.Repository
             param.Add("@PasswordSalt", hmac.Key);
             param.Add("@LoanAppAccountNo", GenerateAccount());
 
-            con.ExecuteScalar("SP_CustomerCreation", param, commandType: CommandType.StoredProcedure);
+            var response = con.ExecuteScalar("SP_CustomerCreation", param, commandType: CommandType.StoredProcedure);
 
             con.Close();
 
-            return true;
+            int customerId = Convert.ToInt32(response);
+
+            return customerId;
         }
 
         #endregion
@@ -123,7 +175,7 @@ namespace website.Repository
             return customerAddrs;
         }
 
-        public bool SaveCustomerAddress(AddressMasterDto address)
+        public int SaveCustomerAddress(AddressMasterDto address)
         {
             connection();
             con.Open();
@@ -139,11 +191,13 @@ namespace website.Repository
             param.Add("@ZipCode", address.ZipCode);
             param.Add("@AddressFor", address.AddressFor);
 
-            con.ExecuteScalar("SP_SaveUserAddress", param, commandType: CommandType.StoredProcedure);
+            var response = con.ExecuteScalar("SP_SaveUserAddress", param, commandType: CommandType.StoredProcedure);
 
             con.Close();
 
-            return true;
+            int addressId = Convert.ToInt32(response);
+
+            return addressId;
         }
 
         #endregion
@@ -164,7 +218,7 @@ namespace website.Repository
             return documenation;
         }
 
-        public bool SaveDocumentation(DocumentationDTO documenation)
+        public int SaveDocumentation(DocumentationDTO documenation)
         {
             connection();
             con.Open();
@@ -183,11 +237,11 @@ namespace website.Repository
             param.Add("@CheckBooKImgPath", documenation.CheckBooKImgPath);
             param.Add("@ProfileImgPath", documenation.ProfileImgPath);
 
-            con.ExecuteScalar("SP_DocumentationCreation", param, commandType: CommandType.StoredProcedure);
+            var response = con.ExecuteScalar("SP_DocumentationCreation", param, commandType: CommandType.StoredProcedure);
 
             con.Close();
-
-            return true;
+            int documentId = Convert.ToInt32(response);
+            return documentId;
         }
 
         #endregion
@@ -196,7 +250,7 @@ namespace website.Repository
         {
             Random random = new Random();
             int randomNumber = random.Next(1000, 9999);
-            return $"LOAN_ACC_{DateTime.Now.Date + "" + randomNumber}";
+            return $"{DateTime.Now.Day}{DateTime.Now.Month}{DateTime.Now.Date.Year}{randomNumber}";
         }
 
     }

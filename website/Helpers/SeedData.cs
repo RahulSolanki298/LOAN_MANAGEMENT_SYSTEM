@@ -28,13 +28,13 @@ namespace website.Helpers
 
             if (userDT.Count == 0)
             {
-                var UserName = "rahulsingh@loancollection.com";
+                var UserName = "singhfinance";
                 var FirstName = "Rahul";
                 var MiddleName = "";
                 var LastName = "Singh";
                 var Gender = "Male";
                 var Password = "Rahul@2023";
-                var EmailId = "rahulsingh@loancollection.com";
+                var EmailId = "singhmutualnidhilimited@gmail.com";
 
                 var param = new DynamicParameters();
                 param.Add("@UserName", UserName);

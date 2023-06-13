@@ -54,6 +54,9 @@ namespace website.Controllers
                     Random random = new Random();
                     int Otp = random.Next(1000, 9999);
                     Session["OTP"] = Otp;
+
+                    //var resp=sendMail(response.EmailId, Otp);
+
                     //string destinationAddr = "91" + response.MobileNo;
                     //string message = "Your OTP Number Is :" + Otp;
 
@@ -123,8 +126,9 @@ namespace website.Controllers
             }
         }
 
-        private string sendMail(string from, string to, int otp)
+        private string sendMail(string to, int otp)
         {
+            string from= "singhmutualnidhilimited@gmail.com";
             using (MailMessage mail = new MailMessage())
             {
                 string Body = $"<h1>OTP:{otp}</h1>";
@@ -137,7 +141,7 @@ namespace website.Controllers
 
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
-                    smtp.Credentials = new NetworkCredential(from, "Rahul@2023");
+                    smtp.Credentials = new NetworkCredential(from, "@Ruhi5151");
                     smtp.EnableSsl = true;
                     smtp.Send(mail);
                 }

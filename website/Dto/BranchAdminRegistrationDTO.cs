@@ -37,7 +37,6 @@ namespace website.Dto
         public string EmailId { get; set; }
 
         [Required]
-        
         public int? BranchId { get; set; }
         public string RoleName { get; set; } = ApplicationRole.BranchAdmin;
         public bool? IsActive { get; set; }

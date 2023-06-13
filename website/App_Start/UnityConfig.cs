@@ -10,7 +10,7 @@ namespace website
     {
         public static void RegisterComponents()
         {
-			var container = new UnityContainer();
+            var container = new UnityContainer();
 
             // register all your components with the container here
             // it is NOT necessary to register your controllers
@@ -20,6 +20,7 @@ namespace website
             container.RegisterType<IAccountRepository, AccountRepository>();
             container.RegisterType<IBranchRepository, BranchRepository>();
             container.RegisterType<ILoanManagerRepository, LoanManagerRepository>();
+            container.RegisterType<IEmployeeRepository, EmployeeRepository>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

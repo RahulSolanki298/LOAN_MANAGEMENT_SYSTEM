@@ -17,6 +17,7 @@ namespace website.Dto
         public string WhatsAppNo { get; set; }
         public string EmailId { get; set; }
         public int? BranchId { get; set; }
+        public string BranchName { get; set; }
         public string RoleName { get; set; } = ApplicationRole.Employee;
         public bool? IsActive { get; set; }
     }

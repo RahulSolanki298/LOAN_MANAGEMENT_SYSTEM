@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 using website.Dto;
-using website.Helpers;
 using website.Interface;
-using website.Models;
 
 namespace website.Controllers
 {
@@ -41,14 +34,52 @@ namespace website.Controllers
 
         public ActionResult ActivatedCustomerList()
         {
+            var branchId = 0;
             var response = _customerRepo.GetActiveCustomers();
+
+            if (Session["BranchId"] != null)
+            {
+                branchId = Convert.ToInt32(Session["BranchId"].ToString());
+            }
+            if (branchId > 0)
+            {
+                var list = response.Where(x => x.BranchId == branchId).ToList();
+                return View(list);
+            }
             return View(response);
         }
 
         public ActionResult DeactivedCustomerList()
         {
+            var branchId = 0;
             var response = _customerRepo.GetNonActiveCustomers();
+
+            if (Session["BranchId"] != null)
+            {
+                branchId = Convert.ToInt32(Session["BranchId"].ToString());
+            }
+            if (branchId > 0)
+            {
+                var list = response.Where(x => x.BranchId == branchId).ToList();
+                return View(list);
+            }
             return View(response);
+        }
+
+        public ActionResult DeleteCustomer(int id)
+        {
+
+            try
+            {
+                var resp = _customerRepo.DeleteCustomer(id);
+                return Json("deleted");
+            }
+            catch (Exception ex)
+            {
+
+                return Json($"Exp:{ex.Message}");
+            }
+
         }
     }
 }

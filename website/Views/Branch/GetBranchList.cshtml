@@ -2,15 +2,16 @@
 @{
     Layout = null;
 }
-<p>
-    @Html.ActionLink("Create New", "CreateBranch")
-</p>
 
 <div class="box">
-    <div class="box-header">
-        <h3 class="box-title">Branch List</h3>
-    </div><!-- /.box-header -->
+    <p>
+        @Html.ActionLink("Create New", "CreateBranch")
+    </p>
+
     <div class="box-body">
+        <div class="box-header">
+            <h3 class="box-title">Branch List</h3>
+        </div><!-- /.box-header -->
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -69,7 +70,7 @@
                         @Html.DisplayNameFor(model => model.IsActivated)
                     </th>
                     <th>
-                       Branch Type
+                        Branch Type
                     </th>
                     <th>Action</th>
                 </tr>

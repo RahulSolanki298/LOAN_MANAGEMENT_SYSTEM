@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 using website.Dto;
+using website.Helpers;
 using website.Interface;
 
 namespace website.Controllers
@@ -30,12 +32,23 @@ namespace website.Controllers
         public ActionResult CreateRegister(string id = "0")
         {
             var Response = new CustomerRegistrationDTO();
+            var branchId = 0;
             ViewBag.BranchList = _branchRepo.GetBranchList().Select(x => new { x.Id, x.Title }).ToList();
             var usrId = Convert.ToInt32(id);
+
+            if (Session["BranchId"] != null)
+            {
+                branchId = Convert.ToInt32(Session["BranchId"].ToString());
+            }
+
             if (usrId > 0)
             {
                 Response = _customerRepo.GetCustomerPrimaryData(usrId);
                 return View(Response);
+            }
+            if (branchId > 0)
+            {
+                Response.BranchId = branchId;
             }
 
             return View(Response);
@@ -48,15 +61,17 @@ namespace website.Controllers
             {
                 ViewBag.BranchList = _branchRepo.GetBranchList().Select(x => new { x.Id, x.Title }).ToList();
 
-                if (ModelState.IsValid)
-                {
-                    var response = _customerRepo.SaveCustomer(customer);
+                //if (ModelState.IsValid)
+                //{
+                    customer.RoleName = ApplicationRole.Customer;
+                    var id = _customerRepo.SaveCustomer(customer);
 
                     TempData["Success"] = "Customer personal detail saved successfully.";
-                    return RedirectToAction("Index");
-                }
-                TempData["Error"] = "Please enter customer registration.";
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { id = id });
+                //}
+                //TempData["Error"] = "Please enter customer registration.";
+                //return RedirectToAction("Index");
+
 
             }
             catch (System.Exception ex)
@@ -86,7 +101,7 @@ namespace website.Controllers
 
             var Response = _customerRepo.SaveCustomerAddress(address);
             TempData["Success"] = "Customer address saved successfully.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { userId = Response });
         }
 
         [HttpGet]
@@ -108,7 +123,7 @@ namespace website.Controllers
         {
             if (documentation.AadharCardImagePathFile != null)
             {
-                string path = Server.MapPath("~/App_Data/AadharCards");
+                string path = Server.MapPath("~/Documentation/AadharCards");
                 string adharFileName = Path.GetFileName(documentation.AadharCardImagePathFile.FileName);
                 string renameFile = Convert.ToString(Guid.NewGuid()) + "." + adharFileName.Split('.').Last();
 
@@ -119,7 +134,7 @@ namespace website.Controllers
 
             if (documentation.PancardImagePathFile != null)
             {
-                string path = Server.MapPath("~/App_Data/Pancards");
+                string path = Server.MapPath("~/Documentation/Pancards");
                 string pancardFileName = Path.GetFileName(documentation.PancardImagePathFile.FileName);
                 string renameFile = Convert.ToString(Guid.NewGuid()) + "." + pancardFileName.Split('.').Last();
 
@@ -130,7 +145,7 @@ namespace website.Controllers
 
             if (documentation.PassBookImgPathFile != null)
             {
-                string path = Server.MapPath("~/App_Data/PassBooks");
+                string path = Server.MapPath("~/Documentation/PassBooks");
                 string passbookFileName = Path.GetFileName(documentation.PassBookImgPathFile.FileName);
                 string renameFile = Convert.ToString(Guid.NewGuid()) + "." + passbookFileName.Split('.').Last();
 
@@ -141,7 +156,7 @@ namespace website.Controllers
 
             if (documentation.CheckBooKImgPathFile != null)
             {
-                string path = Server.MapPath("~/App_Data/CheckBooks");
+                string path = Server.MapPath("~/Documentation/CheckBooks");
                 string checkBookFileName = Path.GetFileName(documentation.CheckBooKImgPathFile.FileName);
                 string renameFile = Convert.ToString(Guid.NewGuid()) + "." + checkBookFileName.Split('.').Last();
 
@@ -152,7 +167,7 @@ namespace website.Controllers
 
             if (documentation.ProfileImgPathFile != null)
             {
-                string path = Server.MapPath("~/App_Data/Profiles");
+                string path = Server.MapPath("~/Documentation/Profiles");
                 string profileFileName = Path.GetFileName(documentation.ProfileImgPathFile.FileName);
                 string renameFile = Convert.ToString(Guid.NewGuid()) + "." + profileFileName.Split('.').Last();
 

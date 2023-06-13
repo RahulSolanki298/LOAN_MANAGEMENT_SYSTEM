@@ -1,88 +1,128 @@
-﻿@model IEnumerable<website.Models.CompanyBranchDetail>
+﻿@model website.Dto.DashboardDTO
 
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SubTitle)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Certificate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CompanyLogo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CompanyRegisterDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActivated)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CompanyBranchType)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Certificate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyLogo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyRegisterDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActivated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyBranchType)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
+<style>
+    .dashboard-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        margin-bottom: 20px;
     }
+</style>
 
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-6">
+            <div class="dashboard-card">
+                <h4>Activated Users</h4>
+                <p>Activated registered users: @(Model.ActiveClientNo)</p>
+                <a href="#" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="dashboard-card">
+                <h4>Deactivated Users</h4>
+                <p>Deactivated registered users: @(Model.DeActiveClientNo)</p>
+                <a href="#" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="dashboard-card">
+                <h4>Today LoanApply</h4>
+                <p>Today Loan Apply: @(Model.TodayLoanApply)</p>
+                <a href="#" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="dashboard-card">
+                <h4>Complated Loan</h4>
+                <p>Complated Loan: @(Model.ComplateLoan)</p>
+                <a href="#" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <table class="table">
+                <tr>
+                    <th>
+                        Loan No
+                    </th>
+                    <th>
+                        Loan Ac No
+                    </th>
+                    <th>
+                        Repayment Date
+                    </th>
+                    <th>
+                        Inst Amount
+                    </th>
+                    <th>
+                        Principal
+                    </th>
+                    <th>
+                        Intrest
+                    </th>
+                    <th>
+                        OS_pricipal</th>
+                    <th>
+                        PaiderName
+                    </th>
+                    <th>
+                        AmountCollected
+                    </th>
+                    <th>
+                        PaidStatus
+                    </th>
+                   
+                    <th></th>
+                </tr>
 
-@section Scripts
-    {
-    <script>
-        function preventBack() {
-            window.history.forward();
-        }
-        setTimeout("preventBack()", 0);
+                @foreach (var item in Model.CustomerLoanList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanAccNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RepaymentDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inst_Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Principal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Intrest)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OS_pricipal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaiderName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AmountCollected)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaidStatus)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
 
-        window.onunload = function () { null };
-    </script>
-}
+            </table>
+        </div>
+    </div>
+</div>
