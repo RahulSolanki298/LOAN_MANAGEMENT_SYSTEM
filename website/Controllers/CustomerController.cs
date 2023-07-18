@@ -66,6 +66,7 @@ namespace website.Controllers
             return View(response);
         }
 
+        [HttpPost]
         public ActionResult DeleteCustomer(int id)
         {
 

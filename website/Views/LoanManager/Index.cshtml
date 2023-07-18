@@ -171,6 +171,16 @@
                 });
             });
 
+            $("#GenerateSectionLatter").on("click","#btnSubmit",function () {
+                var id = $("#txtId").val();
+                var stage = "Loan-Active";
+                PassRequest(id, stage);
+
+            });
+
+
+
+
         });
 
         function showCustomerList() {
@@ -218,8 +228,9 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/Customer/DeleteCustomer?id=' + Id,
-                        type: 'DELETE',
+                        url: '@Url.Action("DeleteCustomer", "Customer")',
+                        type: 'POST',
+                        data: { id: Id },
                         success: function (result) {
                             Swal.fire(
                                 'Deleted!',

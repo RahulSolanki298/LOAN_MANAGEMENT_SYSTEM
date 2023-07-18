@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace website.Interface
 {
@@ -12,13 +13,19 @@ namespace website.Interface
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfBirth { get; set; }
         public string MobileNo { get; set; }
         public string WhatsAppNo { get; set; }
         public string EmailId { get; set; }
         public int? CreatedById { get; set; }
         public int? UpdatedById { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? CreatedDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? UpdatedDate { get; set; }
         public int? BranchId { get; set; }
         public string BranchName { get; set; }

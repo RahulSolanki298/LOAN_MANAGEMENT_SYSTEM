@@ -3,126 +3,126 @@
 @{
     ViewBag.Title = "Index";
 }
-<style>
-    .dashboard-card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-</style>
 
-<div class="container">
+
+<section class="content-header">
+    <h1>
+        Dashboard
+        <small>Version 2.0</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Info boxes -->
     <div class="row">
-        <div class="col-lg-4 col-md-6">
-            <div class="dashboard-card">
-                <h4>Activated Users</h4>
-                <p>Activated registered users: @(Model.ActiveClientNo)</p>
-                <a href="#" class="btn btn-primary">View Details</a>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Loan-Apply</span>
+                    <span class="info-box-number">@(Model.TodayLoanApply)</span>
+                </div>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
         </div>
-        <div class="col-lg-4 col-md-6">
-            <div class="dashboard-card">
-                <h4>Deactivated Users</h4>
-                <p>Deactivated registered users: @(Model.DeActiveClientNo)</p>
-                <a href="#" class="btn btn-primary">View Details</a>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Collection</span>
+                    <span class="info-box-number">41,410</span>
+                </div>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
         </div>
-        <div class="col-lg-4 col-md-6">
-            <div class="dashboard-card">
-                <h4>Today LoanApply</h4>
-                <p>Today Loan Apply: @(Model.TodayLoanApply)</p>
-                <a href="#" class="btn btn-primary">View Details</a>
+        <!-- /.col -->
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Received</span>
+                    <span class="info-box-number">@(Model.TodayLoanApply)</span>
+                </div>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
         </div>
-        <div class="col-lg-4 col-md-6">
-            <div class="dashboard-card">
-                <h4>Complated Loan</h4>
-                <p>Complated Loan: @(Model.ComplateLoan)</p>
-                <a href="#" class="btn btn-primary">View Details</a>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Activated Users</span>
+                    <span class="info-box-number">@(Model.ActiveClientNo)</span>
+                </div>
+                <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <!-- TABLE: LATEST ORDERS -->
+    <div class="row">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Daybook</h3>
+
+                <div class="box-tools pull-right">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-right">Place New Order</a>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive" id="divDayBook">
+                    
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+                <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+            </div>
+            <!-- /.box-footer -->
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
-            <table class="table">
-                <tr>
-                    <th>
-                        Loan No
-                    </th>
-                    <th>
-                        Loan Ac No
-                    </th>
-                    <th>
-                        Repayment Date
-                    </th>
-                    <th>
-                        Inst Amount
-                    </th>
-                    <th>
-                        Principal
-                    </th>
-                    <th>
-                        Intrest
-                    </th>
-                    <th>
-                        OS_pricipal</th>
-                    <th>
-                        PaiderName
-                    </th>
-                    <th>
-                        AmountCollected
-                    </th>
-                    <th>
-                        PaidStatus
-                    </th>
-                   
-                    <th></th>
-                </tr>
+    <!-- /.box -->
+</section>
 
-                @foreach (var item in Model.CustomerLoanList)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LoanNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LoanAccNo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RepaymentDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Inst_Amount)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Principal)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Intrest)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OS_pricipal)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PaiderName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AmountCollected)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PaidStatus)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                        </td>
-                    </tr>
-                }
+@section Scripts
+    {
 
-            </table>
-        </div>
-    </div>
-</div>
+    <script src="~/Content/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src='~/Content/plugins/fastclick/fastclick.min.js'></script>
+    <script src="~/Content/dist/js/app.min.js" type="text/javascript"></script>
+    <script src="~/Content/dist/js/demo.js" type="text/javascript"></script>
+
+    <!-- page script -->
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            DayBook();
+        });
+        function DayBook() {
+            $.get("Home/DaybookData", function (data) {
+                $("#divDayBook").html(data);
+            });
+        }
+    </script>
+}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace website.Dto
 {
@@ -23,12 +24,14 @@ namespace website.Dto
 
         public string AadharCard { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? LoanApplyAmountDate { get; set; }
 
         public decimal? LoanApplyAmount { get; set; }
 
         public decimal? LoanEMI { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? SectionAmountDate { get; set; }
 
         public decimal? SectionAmount { get; set; }

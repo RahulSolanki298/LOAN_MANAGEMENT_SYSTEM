@@ -4,11 +4,11 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
-using website.Models;
+using website.Dto;
 
 namespace website.APIControllers
 {
-    public class CompanyBranchController : ApiController
+    public class CustomerAPIController : ApiController
     {
         public SqlConnection con;
 
@@ -18,19 +18,20 @@ namespace website.APIControllers
             con = new SqlConnection(constr);
         }
 
-        [Route("api/branch/BranchList")]
-        public List<CompanyBranchDetail> GetCompanyDetails()
+        // GET: CustomerAPI
+        [Route("api/CustomerAPI/active-customers")]
+        [HttpGet]
+        public List<CustomerRegistrationDTO> ActiveCustomers()
         {
             connection();
             con.Open();
 
-            List<CompanyBranchDetail> EmpList = SqlMapper.Query<CompanyBranchDetail>(
-                              con, "SP_CompanyAndBranchList").ToList();
+            var customers = SqlMapper.Query<CustomerRegistrationDTO>(
+                              con, "select * from ApplicationCustomer where IsActive=1 order by Id desc").ToList();
 
             con.Close();
 
-            return EmpList;
-
+            return customers;
         }
     }
 }

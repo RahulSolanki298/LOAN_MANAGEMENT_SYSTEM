@@ -20,5 +20,7 @@ namespace website.Interface
         bool SaveBranchDetail(CompanyBranchDetail branchDetail);
 
         bool DeleteBranchDetail(int id);
+
+        CompanyBranchDetail GetBranchByName(string branchName);
     }
 }

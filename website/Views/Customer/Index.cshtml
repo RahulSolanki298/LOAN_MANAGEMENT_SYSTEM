@@ -93,8 +93,9 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "@Url.Action("DeleteCustomer",new { Id= UrlParameter.Optional})",
-                        type: 'DELETE',
+                        url: "@website.Helpers.APIPath.Api_Path" +"Customer/DeleteCustomer",
+                        type: 'Post',
+                        data: {id:Id},
                         success: function (result) {
                             Swal.fire(
                                 'Deleted!',
@@ -109,7 +110,7 @@
         }
 
         function ApplyLoan(Id) {
-            window.location.replace("http://localhost:50000/LoanManager/LoanApply?userId="+Id);
+            window.location.replace("@(website.Helpers.APIPath.Api_Path)LoanManager/LoanApply?userId="+Id);
         }
     </script>
 }

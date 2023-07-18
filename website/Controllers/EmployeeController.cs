@@ -52,7 +52,9 @@ namespace website.Controllers
         public ActionResult EmployeeIndex(int? id = 0)
         {
             ViewBag.UserId = id;
-            return View("~/Views/EmployeeRegistration/Index.cshtml",new EmployeeRegistrationDTO());
+            ViewBag.BranchList = _branchRepo.GetBranchList().Select(x => new { x.Id, x.Title }).ToList();
+
+            return View("~/Views/EmployeeRegistration/Index.cshtml", new EmployeeRegistrationDTO());
         }
 
         [HttpGet]
@@ -105,10 +107,15 @@ namespace website.Controllers
             if (userId > 0)
             {
                 Response = _empRepo.GetEmployeeAddress(userId);
-                return View(Response);
+                if (Response == null)
+                {
+                    Response.UserId = userId;
+                }
+
+                return View("~/Views/EmployeeRegistration/CreateAddressDetails.cshtml", Response);
             }
 
-            return View(Response);
+            return View("~/Views/EmployeeRegistration/CreateAddressDetails.cshtml", Response);
         }
 
         [HttpPost]
@@ -128,10 +135,15 @@ namespace website.Controllers
             if (userId > 0)
             {
                 Response = _empRepo.GetDocumentation(userId);
-                return View(Response);
+                if (Response != null)
+                {
+                    return View("~/Views/EmployeeRegistration/CreateDocumentation.cshtml", Response);
+                }
+
+                return View("~/Views/EmployeeRegistration/CreateDocumentation.cshtml", new DocumentationDTO());
             }
 
-            return View(Response);
+            return View("~/Views/EmployeeRegistration/CreateDocumentation.cshtml", Response);
         }
 
         [HttpPost]
@@ -204,10 +216,16 @@ namespace website.Controllers
             if (usrId > 0)
             {
                 Response = _empRepo.GetEmployeePrimaryData(usrId);
-                return View(Response);
+
+                if (Response == null)
+                {
+                    Response.UserId = userId;
+                }
+
+                return View("~/Views/EmployeeRegistration/CreateAccountDetails.cshtml", Response);
             }
 
-            return View(Response);
+            return View("~/Views/EmployeeRegistration/CreateAccountDetails.cshtml", Response);
         }
 
         [HttpPost]

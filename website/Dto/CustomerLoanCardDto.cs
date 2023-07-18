@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace website.Dto
 {
@@ -6,9 +7,11 @@ namespace website.Dto
     {
         public int Id { get; set; }
 
+        public string CustomerName { get; set; }
         public string LoanAccNo { get; set; }
         public string LoanNo { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? RepaymentDate { get; set; }
 
         public decimal? Inst_Amount { get; set; }

@@ -1,6 +1,10 @@
-﻿using System.Configuration;
+﻿using Dapper;
+using System;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.Mvc;
+using website.Dto;
 using website.Interface;
 
 namespace website.Controllers
@@ -27,11 +31,23 @@ namespace website.Controllers
             connection();
             con.Open();
 
-             var result=_customerRepository.Dashboard();
+            var result = _customerRepository.Dashboard();
 
 
             con.Close();
             return View(result);
+        }
+
+        public ActionResult DaybookData()
+        {
+            connection();
+            con.Open();
+
+            var CustomerLoanList = SqlMapper.Query<CustomerLoanCardDto>(
+                              con, $"select usr.FirstName +' '+usr.LastName as CustomerName,clc.* from CustomerLoanCard clc inner join AppUser usr on clc.LoanAccNo = usr.LoanAppAccountNo where RepaymentDate='{DateTime.Now}'").ToList();
+
+            con.Close();
+            return View(CustomerLoanList);
         }
 
         public ActionResult customerList()

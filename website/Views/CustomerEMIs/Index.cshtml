@@ -13,178 +13,63 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserId)
+            Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CustomerName)
+            Customer
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BranchId)
+            Branch
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.BranchName)
+            Loan Amount
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LoanApplyAmountDate)
+            Loan & intrest
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LoanApplyAmount)
+            No of Days
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LoanEMI)
+            Intrest (%)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SectionAmountDate)
+            EMI
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SectionAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedById)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UpdateById)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UpdatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DeletedById)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DeletedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsNoOfDays)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsNoOfWeeks)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsNoOfMonths)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsNoOfYear)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NoOfDays)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NoOfWeeks)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NoOfMonths)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NoOfYears)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LoanIntrest)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LoanAccNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LoanNo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LoanDate)
-        </th>
-        <th></th>
+        <th>Action</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CustomerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BranchId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BranchName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanApplyAmountDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanApplyAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanEMI)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SectionAmountDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SectionAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedById)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UpdateById)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UpdatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DeletedById)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DeletedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsNoOfDays)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsNoOfWeeks)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsNoOfMonths)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsNoOfYear)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NoOfDays)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NoOfWeeks)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NoOfMonths)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NoOfYears)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanIntrest)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanAccNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanNo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoanDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SectionAmountDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BranchName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SectionAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanNetAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanIntrest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanEMI)
+            </td>
+            <td>
+                @Html.ActionLink("Show loan card", "Edit", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

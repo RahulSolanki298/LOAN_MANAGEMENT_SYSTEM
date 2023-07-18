@@ -1,0 +1,150 @@
+﻿@using website.Helpers;
+@{
+    ViewBag.Title = "DayBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="box">
+    <h1>Daybook</h1>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">Branch Name</label>
+            <div class="col-md-3">
+                @{
+                    if (ViewBag.RoleName == @ApplicationRole.Admin)
+                    {
+                        <select class="form-control" id="selectBranch">
+                            <option value="0">Select</option>
+                            @foreach (var item in ViewBag.BranchList)
+                            {
+                                <option value="@item.Id">@item.Title</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <input type="hidden" id="selectBranch" value="@ViewBag.Branch" />
+                    }
+                }
+
+
+            </div>
+            <div id="frmPaymentType">
+                <label class="control-label col-md-2">Paid By</label>
+                <div class="col-md-3">
+                    <select class="form-control" id="PaymentType">
+                        <option value="0">Select</option>
+                        <option value="@PaymentType.CASH">@PaymentType.CASH</option>
+                        <option value="@PaymentType.GPAY">@PaymentType.GPAY</option>
+                        <option value="@PaymentType.PhonePay">@PaymentType.PhonePay</option>
+                        <option value="@PaymentType.PayTM">@PaymentType.PayTM</option>
+                        <option value="@PaymentType.WhatsAppPay">@PaymentType.WhatsAppPay</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="btnSubmit">Submit</button>
+            </div>
+        </div>
+
+    </div>
+    <p>
+        Date: @( DateTime.Now.ToString("dd-MM-yyyy"))
+    </p>
+    <div id="dtDaybook">
+
+    </div>
+
+    
+
+</div>
+
+@section Scripts
+{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#frmPaymentType").attr("style", "display:none");
+            var selectedIds = [];
+            getDayBook();
+
+            $('#dtDaybook').on('click', '#checkAll', function () {
+                const isChecked = $(this).prop('checked');
+                $('.checkbox').prop('checked', isChecked);
+                toggleSubmitButton(isChecked);
+                $('.checkbox:checked').each(function () {
+                    selectedIds.push(parseInt($(this).val()));
+                });
+            });
+
+            $('#dtDaybook').on('click',".checkbox", function () {
+                const isChecked = $(this).prop('checked');
+                const value = parseInt($(this).val());
+
+                if (isChecked) {
+                    selectedIds.push(value);
+                } else {
+                    const index = $.inArray(value, selectedIds);
+                    if (index !== -1) {
+                        selectedIds.splice(index, 1);
+                    }
+                }
+
+                toggleSubmitButton(isChecked);
+            });
+
+            $('#btnSubmit').on('click', function (e) {
+                debugger;
+                e.preventDefault();
+                const paidBy = $('#PaymentType').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("SaveSelectedItems", "CustomerEMIs")',
+                    data: { selectedIds: selectedIds, paidBy: paidBy },
+                    success: function (data) {
+                        alert(data);
+                        window.location.reload();
+                    },
+                    error: function () {
+                        alert('Error occurred while saving data.');
+                    }
+                });
+            });
+
+            function toggleSubmitButton(isChecked) {
+                if (isChecked) {
+
+                    $("#frmPaymentType").removeAttr("style");
+                } else {
+                    if (selectedIds.length == 0) {
+                        $("#frmPaymentType").attr("style", "display:none");
+                    }
+                    else {
+                        $("#frmPaymentType").removeAttr("style");
+                    }
+                }
+            }
+        });
+
+        function getDayBook()
+        {
+            debugger;;
+            var branchId =  $("#selectBranch").val();
+                $.ajax({
+                    url: "@(website.Helpers.APIPath.Api_Path)CustomerEMIs/GetDaybookData?branchId="+branchId,
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        $("#dtDaybook").empty();
+                        $("#dtDaybook").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                        alert(xhr);
+                    }
+                });
+            }
+
+    </script>
+
+}

@@ -15,5 +15,7 @@ namespace website.Interface
         int SaveDocumentation(DocumentationDTO documenation);
         bool DeleteCustomer(int id);
         DashboardDTO Dashboard();
+
+        string SaveMultipleCustomer(List<ApplicationUserDTO> customers);
     }
 }

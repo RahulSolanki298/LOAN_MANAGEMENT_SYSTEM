@@ -7,6 +7,7 @@ namespace website.Interface
     {
         List<CustomerLoanManagerDTO> GetCustomersLoan(int userId, int branchId, string loanStatus, string loginUserRole);
 
+        List<CustomerLoanCardDto> GetLoanReceableDayBook(int userId, int branchId, string loanStatus, string loginUserRole);
         SectionLatterDTO GetCustomerLoan(int id);
 
         CustomerLoanManagerDTO GetCustomerLoanData(int id);
@@ -14,5 +15,7 @@ namespace website.Interface
         bool SaveCustomerLoanApply(CustomerLoanManagerDTO data);
 
         bool UpdateLoanStatus(int id, string status);
+
+        string SaveEMIForMultipleUser(List<int> selectedIds, string paidBy, int branchId, string loginUserRole);
     }
 }

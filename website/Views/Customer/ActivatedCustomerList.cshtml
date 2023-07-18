@@ -8,7 +8,8 @@
 <div class="box">
     <div class="box-header">
         <span>
-            <a id="btnCustomerRegister" href='@Url.Action("Index", "CustomerRegistration")'>Click here</a>
+            <a id="btnCustomerRegister" class="btn btn-success" href='@Url.Action("Index", "CustomerRegistration")'>Add Customer</a>
+            <button id="btnCustomerRegisters" class="btn btn-success" data-toggle="modal" data-target="#modalBulkCust">Add Multiple Customer</button>
         </span>
 
     </div><!-- /.box-header -->
@@ -63,9 +64,103 @@
         </table>
     </div><!-- /.box-body -->
 </div><!-- /.box -->
+<!-- Modal -->
+<div class="modal fade" id="modalBulkCust" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Multiple Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="file-upload" class="col-form-label">File Upload *:</label>
+                    <input type="file" class="form-control" id="FileUpload">
+                    <label id="valFileUpload" class="text-danger"></label>
+                </div>
+                <div>
+                    <h5>Note :</h5>
+                    <ul>
+                        <li>Please upload excel-file only.</li>
+                        <li>Download file for sample excel data.</li>
+                        <li><a class="btn btn-primary btn-outline-secondary" href="~/Content/Excels/customers.xlsx">Download Now</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
-    $(function () {
-        $("#example1").dataTable();
-    });
+        $(function () {
+            $("#example1").dataTable();
+        });
+        $(document).ready(function () {
+                $("#FileUpload").change(function () {
+                var extension = $(this).val().split('.').pop().toLowerCase();
+                var validFileExtensions = ['xls', 'xlsx'];
+                if ($.inArray(extension, validFileExtensions) == -1)
+                {
+                    $('#valFileUpload').text("Sorry!! Upload only xls, xlsx file").show();
+                    // Clear fileuload control selected file
+                    $(this).replaceWith($(this).val('').clone(true));
+                    //Disable Submit Button
+                    $('#btnSave').prop('disabled', true);
+                }
+                else
+                {
+                     // Check and restrict the file size to 32 KB.
+                    if ($(this).get(0).files[0].size > (32768))
+                    {
+                        $('#valFileUpload').text("Sorry!! Max allowed file size is 32 kb").show();
+                        // Clear fileuload control selected file
+                        $(this).replaceWith($(this).val('').clone(true));
+                        //Disable Submit Button
+                        $('#btnSubmit').prop('disabled', true);
+                    }
+                     else
+                     {
+                        //Clear and Hide message span
+                        $('#valFileUpload').text('').hide();
+                        //Enable Submit Button
+                        $('#btnSave ').prop('disabled', false); 
+                    }
+                }
+            });
+
+                $("#btnSave").click(function ()
+                {
+                        var fileInput = $('#FileUpload')[0];
+                        var file = fileInput.files[0];
+
+                        var formData = new FormData();
+                        formData.append('file', file);
+
+                        $.ajax({
+                        url: "@Url.Action("ImportExcel", "CustomerRegistration")",
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                        console.log(data);
+                        return false;
+                        },
+                        error: function (x, y, z) {
+                        alert('error al postear');
+                        return false;
+                }
+            });
+          });
+
+        });
+
+
 </script>

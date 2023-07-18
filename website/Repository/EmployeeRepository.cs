@@ -87,6 +87,14 @@ namespace website.Repository
             con.Open(); 
             var hmac = new HMACSHA512();
 
+            var response = SqlMapper.Query<EmployeeRegistrationDTO>(
+                              con, $"select * from ApplicationEmployee where EmailId='{employee.EmailId}' or MobileNo='{employee.MobileNo}'").ToList();
+
+            if (response.Count >0 && employee.Id == 0)
+            {
+                return 0;
+            }
+
             if (employee.Id == 0)
             {
                 employee.Password = employee.FirstName + "@" + DateTime.Now.Year.ToString();
@@ -110,12 +118,14 @@ namespace website.Repository
             param.Add("@IsActive", employee.IsActive);
             param.Add("@PasswordHash", hmac.ComputeHash(Encoding.UTF8.GetBytes(employee.Password)));
             param.Add("@PasswordSalt", hmac.Key);
+            param.Add("@EmployeeTitle", employee.EmployeeTitle);
+            param.Add("@EmployeeSalary", employee.EmployeeSalary);
 
-            var response = con.ExecuteScalar("SP_EmployeeCreation", param, commandType: CommandType.StoredProcedure);
+            var EmployeeId = con.ExecuteScalar("SP_EmployeeCreation", param, commandType: CommandType.StoredProcedure);
 
             con.Close();
 
-            int customerId = Convert.ToInt32(response);
+            int customerId = Convert.ToInt32(EmployeeId);
 
             return customerId;
         }

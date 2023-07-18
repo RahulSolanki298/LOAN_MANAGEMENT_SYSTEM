@@ -12,7 +12,5 @@ namespace website.Dto
 
         public int ComplateLoan { get; set; }
 
-        public List<CustomerLoanCardDto> CustomerLoanList { get; set; }
-
     }
 }

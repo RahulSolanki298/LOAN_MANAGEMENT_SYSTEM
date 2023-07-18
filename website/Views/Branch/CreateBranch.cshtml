@@ -21,7 +21,7 @@
                         if (@TempData["Success"] != null)
                         {
                             <script type="text/javascript">
-                                alert("@TempData["Error"]");
+                                alert("@TempData["Success"].ToString()");
                             </script>
 
                         }
@@ -115,8 +115,8 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Save" class="btn btn-default" />
-                                    <a href="##" class="btn btn-success" onClick="history.go(-1); return false;"> Back</a>
+                                    <a href="##" class="btn btn-danger" onClick="history.go(-1); return false;"> Cancel</a>
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
 
                                 </div>
                             </div>

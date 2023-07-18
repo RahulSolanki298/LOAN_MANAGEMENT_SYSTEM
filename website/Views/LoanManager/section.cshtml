@@ -83,13 +83,12 @@
 
                                     for (int i = 0; i < Convert.ToInt32(Model.loanData.NoOfDays); i++)
                                     {
-
                                         Model.loanData.LoanNetAmount = Convert.ToInt32(Model.loanData.LoanNetAmount - Model.loanData.LoanEMI);
                                         <tr>
                                             <td>@DateTime.Now.AddDays(i).ToString("dd-MM-yyyy")</td>
-                                            <td>@Model.loanData.LoanNetAmount</td>
+                                            <td>@Model.loanData.SectionAmount</td>
                                             <td>@Model.loanData.LoanIntrest</td>
-                                            <td>@loanAmt</td>
+                                            <td>@Model.loanData.LoanNetAmount</td>
                                             <td>@Model.loanData.LoanEMI</td>
                                         </tr>
                                     }
@@ -126,23 +125,23 @@
 @section Scripts
     {
     <script type="text/javascript">
-        $("#btnSubmit").click(function () {
-            var id = $("#txtId").val();
-            var stage = "Loan-Active";
-            $.ajax({
-                url: "/LoanManager/SubmitSectionLetter?id=" + id + "&status=" + stage,
-                type: 'PUT',
-                success: function (response) {
-                    Swal.fire(
-                        'Passed',
-                        response,
-                        'success'
-                    );
-                    //alert(response)
-                }
-            });
+        //$("#btnSubmit").click(function () {
+        //    var id = $("#txtId").val();
+        //    var stage = "Loan-Active";
+        //    $.ajax({
+        //        url: "/LoanManager/SubmitSectionLetter?id=" + id + "&status=" + stage,
+        //        type: 'PUT',
+        //        success: function (response) {
+        //            Swal.fire(
+        //                'Passed',
+        //                response,
+        //                'success'
+        //            );
+        //            //alert(response)
+        //        }
+        //    });
 
-        });
+        //});
 
     </script>
 }

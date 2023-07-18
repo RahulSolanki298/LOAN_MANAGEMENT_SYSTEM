@@ -132,6 +132,77 @@
                 $("#customerForm #clsImageFocas").modal("show");
                 $("#clsImageFocas img").attr("src", this.src);
                 $("#clsImageFocas #ImageName").text(this.title);
+            });
+
+            $('#isAgeSelected').click(function () {
+                $("#txtAge").toggle(this.checked);
+            });
+
+            $("#customerForm").on("click", "#btnEmployeeSave", function () {
+                debugger;
+                var id = $("#Id").val();
+                var firstName = $("#firstName").val();
+                var middleName = $("#middleName").val();
+                var lastName = $("#lastName").val();
+                var gender = $("#ddlGender").find(":selected").text();
+                var birthDate = $("#birthDate").val();
+                var mobileNo = $("#mobileNo").val();
+                var whatsAppNo = $("#whatsAppNo").val();
+                var emailId = $("#emailId").val();
+                var branchId = $("#BranchId").find(":selected").val();
+                var employeeTitle = $("#employeeTitle").val();
+                var employeeSalary = $("#salary").val();
+
+                var isActive = false;
+                if ($('#chkIsActive').prop('checked')) {
+                    isActive = true;
+                } else {
+                    // something else when not
+                    isActive = false;
+                }
+
+                // Create a JSON object to send the data
+                var data = {
+                    Id:id,
+                    FirstName: firstName,
+                    MiddleName: middleName,
+                    LastName: lastName,
+                    Gender: gender,
+                    DateOfBirth: birthDate,
+                    MobileNo: mobileNo,
+                    WhatsAppNo: whatsAppNo,
+                    EmailId: emailId,
+                    BranchId: branchId,
+                    IsActive: isActive,
+                    EmployeeTitle: employeeTitle,
+                    EmployeeSalary: employeeSalary
+                };
+                if (!frm1Validation(data)) {
+
+                    // Perform the AJAX POST request
+                    $.ajax({
+                        url: '/Employee/CreateRegister',
+                        type: 'POST',
+                        data: data,
+                        success: function (response) {
+                            // Handle the response from the server
+                            console.log(response);
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle errors
+                            console.error(error);
+                        }
+                    });
+                } else {
+                    alert("Failed")
+                }
+            });
+
+            $("#customerForm").on("click", "#btnAddressSave", function () {
+
+            });
+
+            $("#customerForm").on("click", "#btnDocumentSave", function () {
 
             });
 
@@ -145,6 +216,74 @@
             });
         }
 
+        function frm1Validation(data)
+        {
+            let error=[];
+            if (data.FirstName == "" || data.FirstName == null || data.FirstName == undefined) {
+                $("#errFName").text("Please enter first name.");
+                error["firstName"] = true;
+            } else {
+                $("#errFName").text("");
+                error["firstName"] = false;
+            }
+
+            if (data.MiddleName == "" || data.MiddleName == null || data.MiddleName == undefined) {
+                $("#errMName").text("Please enter middle name.");
+                error["middleName"] = true;
+            } else {
+                $("#errMName").text("");
+                error["middleName"] = false;
+            }
+
+            if (data.LastName == "" || data.LastName == null || data.LastName == undefined) {
+                $("#errLName").text("Please enter last name.");
+                error["lastName"] = true;
+            } else {
+                $("#errLName").text("");
+                error["lastName"] = false;
+            }
+
+            if (data.Gender == "" || data.Gender == null || data.Gender == undefined) {
+                $("#errGender").text("Please select gender.");
+                error["Gender"] = true;
+            } else {
+                $("#errGender").text("");
+                error["Gender"] = false;
+            }
+
+            if (data.birthDate == "" || data.birthDate == null || data.birthDate == undefined) {
+                $("#errbirthDate").text("Please enter birthdate.");
+                error["BirthDate"] = true;
+            } else {
+                $("#errbirthDate").text("");
+                error["BirthDate"] = false;
+            }
+
+            if (data.mobileNo == "" || data.mobileNo == null || data.mobileNo == undefined) {
+                $("#errMobileNo").text("Please enter mobile no.");
+                error["MobileNo"] = true;
+            } else {
+                $("#errMobileNo").text("");
+                error["MobileNo"] = false;
+            }
+
+            if (data.emailId == "" || data.emailId == null || data.mobileNo == undefined) {
+                $("#errEmailId").text("Please enter email.");
+                error["EmailId"] = true;
+            } else {
+                $("#errEmailId").text("");
+                error["EmailId"] = false;
+            }
+
+
+            if (error["firstName"] == true || error["middleName"] == true ||
+                error["lastName"] == true || error["Gender"] == true ||
+                error["BirthDate"] == true || error["MobileNo"] == true ||
+                error["EmailId"] == true) {
+                return true;
+            }
+            return false;
+        }
 
     </script>
 

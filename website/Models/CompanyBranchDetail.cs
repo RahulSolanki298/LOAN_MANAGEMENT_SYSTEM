@@ -22,6 +22,7 @@ namespace website.Models
 
         public string CompanyLogo { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? CompanyRegisterDate { get; set; }
 
         public bool? IsActivated { get; set; }

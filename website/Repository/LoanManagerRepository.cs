@@ -5,8 +5,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using website.Dto;
+using website.Helpers;
 using website.Interface;
 using website.Models;
 
@@ -41,11 +42,10 @@ namespace website.Repository
             connection();
             con.Open();
 
-            slData = SqlMapper.Query<CustomerLoanManagerDTO>(
-                            con, $"select *,ac.FirstName +''+ac.LastName as CustomerName,cbd.Title from CustomerLoanManager clm " +
-                            $"inner join ApplicationCustomer ac on clm.UserId =ac.Id " +
-                            $"inner join CompanyBranchDetails cbd on clm.BranchId =cbd.Id " +
-                            $"where ac.IsActive=1 and clm.Id={id}").FirstOrDefault();
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("id", id);
+
+            slData = con.QuerySingleOrDefault<CustomerLoanManagerDTO>("Get_CustomerLoanManager", parameters, commandType: CommandType.StoredProcedure);
 
             return slData;
         }
@@ -57,7 +57,7 @@ namespace website.Repository
             con.Open();
 
             slData.loanData = SqlMapper.Query<CustomerLoanManagerDTO>(
-                            con, $"select *,ac.FirstName +''+ac.LastName as CustomerName,cbd.Title from CustomerLoanManager clm " +
+                            con, $"select *,clm.Id,ac.FirstName +''+ac.LastName as CustomerName,cbd.Title from CustomerLoanManager clm " +
                             $"inner join ApplicationCustomer ac on clm.UserId =ac.Id " +
                             $"inner join CompanyBranchDetails cbd on clm.BranchId =cbd.Id " +
                             $"where ac.IsActive=1 and clm.Id={id}").FirstOrDefault();
@@ -116,14 +116,15 @@ namespace website.Repository
                             con, $"select * from CustomerLoanManager where Id = {id}").FirstOrDefault();
 
             LoanDetail.SectionAmount = LoanDetail.LoanApplyAmount;
-            LoanDetail.SectionAmountDate=DateTime.Now;
+            LoanDetail.SectionAmountDate = DateTime.Now;
+            LoanDetail.LoanDate = DateTime.Now;
             //LoanDetail.UpdateById = string.Empty;
-            LoanDetail.UpdatedDate= DateTime.Now;
+            LoanDetail.UpdatedDate = DateTime.Now;
 
-            string sqlQuery1 = $"update CustomerLoanManager set SectionAmount=@SectionAmount,SectionAmountDate=@SectionAmountDate,UpdatedDate=@UpdatedDate where Id={id}";
+            string sqlQuery1 = $"update CustomerLoanManager set SectionAmount=@SectionAmount,SectionAmountDate=@SectionAmountDate,UpdatedDate=@UpdatedDate,LoanDate=@LoanDate where Id={id}";
 
             int rowsAffected1 = con.Execute(sqlQuery1, LoanDetail);
-            
+
             var PassLoanDT = SqlMapper.Query<CustomerLoanManagerStage>(
                             con, $"select * from CustomerLoanManagerStage where CustomerLoanManagerId = {id}").FirstOrDefault();
 
@@ -133,8 +134,86 @@ namespace website.Repository
 
             int rowsAffected = con.Execute(sqlQuery, PassLoanDT);
 
+            if (status == LoanStages.Active)
+            {
+                var manageLoan = SqlMapper.Query<CustomerLoanManagerDTO>(
+                            con, $"select * from CustomerLoanManager where Id = {id}").FirstOrDefault();
+
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("LoanAccNo", typeof(string));
+                dataTable.Columns.Add("LoanNo", typeof(string));
+                dataTable.Columns.Add("RepaymentDate", typeof(DateTime));
+                dataTable.Columns.Add("OS_pricipal", typeof(decimal));
+                dataTable.Columns.Add("Inst_Amount", typeof(decimal));
+                dataTable.Columns.Add("Principal", typeof(decimal));
+                dataTable.Columns.Add("Intrest", typeof(decimal));
+
+                var loanAmt = Convert.ToDecimal(manageLoan.LoanNetAmount);
+                for (int i = 1; i <= int.Parse(manageLoan.NoOfDays); i++)
+                {
+                    manageLoan.LoanNetAmount = Convert.ToInt32(manageLoan.LoanNetAmount - manageLoan.LoanEMI);
+
+
+                    dataTable.Rows.Add(
+                        manageLoan.LoanAccNo,
+                        manageLoan.LoanNo,
+                        DateTime.Now.AddDays(i),
+                        manageLoan.LoanNetAmount,
+                        manageLoan.LoanEMI,
+                        loanAmt,
+                        manageLoan.LoanIntrest
+                        );
+                }
+                var param = new DynamicParameters();
+                param.Add("@LoanCard", dataTable);
+                con.Execute("SP_LoanCardCreate", new { LoanCard = dataTable.AsTableValuedParameter("LoanCard") }, commandType: CommandType.StoredProcedure);
+            }
+
             con.Close();
             return true;
+        }
+
+        public List<CustomerLoanCardDto> GetLoanReceableDayBook(int userId, int branchId, string loanStatus, string loginUserRole)
+        {
+            connection();
+            con.Open();
+
+            var loanData = SqlMapper.Query<CustomerLoanCardDto>(
+                             con, $"getCustomerEMICard {branchId},'{loginUserRole}'").ToList();
+
+            con.Close();
+
+            return loanData;
+        }
+
+        public string SaveEMIForMultipleUser(List<int> selectedIds, string paidBy, int branchId, string loginUserRole)
+        {
+            try
+            {
+                connection();
+                con.Open();
+
+                var DataList = SqlMapper.Query<CustomerLoanCardDto>(
+                            con, $"getCustomerEMICard {branchId},'{loginUserRole}'").ToList();
+
+
+                for (int i = 0; i < selectedIds.Count; i++)
+                {
+                    var loanDT = DataList.Where(x=>x.Id == selectedIds[i]).FirstOrDefault();
+
+                    string sqlQuery = $"update CustomerLoanCard set PaiderName='{loanDT.CustomerName}',AmountCollected='{loanDT.Inst_Amount}',PaidStatus='1',PaidBy='{paidBy}' where Id ={loanDT.Id}";
+                    con.Execute(sqlQuery);
+                }
+
+                con.Close();
+
+                return "Data saved successfully";
+            }
+            catch (Exception ex)
+            {
+
+                return $"Exeption:{ex.Message}";
+            }
         }
     }
 }

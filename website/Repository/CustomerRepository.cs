@@ -68,8 +68,6 @@ namespace website.Repository
             dashboardDTO.ComplateLoan = SqlMapper.Query<int>(
                               con, $"select count(*) from CustomerLoanCard where RepaymentDate='{DateTime.Now}'").FirstOrDefault();
 
-            dashboardDTO.CustomerLoanList = SqlMapper.Query<CustomerLoanCardDto>(
-                              con, $"select * from CustomerLoanCard where RepaymentDate='{DateTime.Now}'").ToList();
 
             con.Close();
 
@@ -147,7 +145,7 @@ namespace website.Repository
             param.Add("@IsActive", customer.IsActive);
             param.Add("@PasswordHash", hmac.ComputeHash(Encoding.UTF8.GetBytes(customer.Password)));
             param.Add("@PasswordSalt", hmac.Key);
-            param.Add("@LoanAppAccountNo", GenerateAccount());
+            param.Add("@LoanAppAccountNo", GenerateAccount((DateTime)customer.DateOfBirth));
 
             var response = con.ExecuteScalar("SP_CustomerCreation", param, commandType: CommandType.StoredProcedure);
 
@@ -156,6 +154,61 @@ namespace website.Repository
             int customerId = Convert.ToInt32(response);
 
             return customerId;
+        }
+
+        public string SaveMultipleCustomer(List<ApplicationUserDTO> customers)
+        {
+            try
+            {
+                connection();
+                con.Open();
+                ApplicationUserDTO dt = new ApplicationUserDTO();
+                List<ApplicationUserDTO> InsertCustomers = new List<ApplicationUserDTO>();
+                List<ApplicationUserDTO> UpdateCustomers = new List<ApplicationUserDTO>();
+
+                foreach (var customer in customers)
+                {
+                    dt = SqlMapper.Query<ApplicationUserDTO>(
+                              con, $"select * from AppUser where EmailId='{customer.EmailId}'").FirstOrDefault();
+
+                    if (dt == null)
+                    {
+                        InsertCustomers.Add(customer);
+                    }
+
+                }
+
+                var trans = con.BeginTransaction();
+
+                var response = con.Execute(@"INSERT INTO AppUser (UserName, FirstName, MiddleName,LastName,Gender,DateOfBirth,MobileNo,WhatsAppNo,EmailId,CreatedById,CreatedDate,BranchId,IsActive,PasswordHash,PasswordSalt,LoanAppAccountNo)" +
+                                "values(@UserName, @FirstName, @MiddleName,@LastName,@Gender,@DateOfBirth,@MobileNo,@WhatsAppNo,@EmailId,@CreatedById,@CreatedDate,@BranchId,@IsActive,@PasswordHash,@PasswordSalt,@LoanAppAccountNo)", InsertCustomers, transaction: trans);
+
+                trans.Commit();
+                con.Close();
+
+                con.Open();
+
+                foreach (var customer in InsertCustomers)
+                {
+                    dt = SqlMapper.Query<ApplicationUserDTO>(
+                              con, $"select * from AppUser where EmailId='{customer.EmailId}'").FirstOrDefault();
+
+                    var dt2 = SqlMapper.Query<int>(
+                             con, $"select Id from AppRole where Name='{customer.RoleName}'").FirstOrDefault();
+
+                    string sqlQuery1 = $"Insert into AppUserRole(UserId,RoleId)values({dt.Id},{dt2})";
+                    con.Execute(sqlQuery1);
+                }
+
+                con.Close();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+
+                return $"Fail with Ex: {ex.Message}";
+            }
+
         }
 
         #endregion
@@ -246,11 +299,11 @@ namespace website.Repository
 
         #endregion
 
-        private string GenerateAccount()
+        private string GenerateAccount(DateTime date)
         {
             Random random = new Random();
-            int randomNumber = random.Next(1000, 9999);
-            return $"{DateTime.Now.Day}{DateTime.Now.Month}{DateTime.Now.Date.Year}{randomNumber}";
+            string accountNumber = date.Day.ToString() + date.Month.ToString() + date.Year.ToString() + random.Next(100000, 9999999).ToString();
+            return accountNumber;
         }
 
     }

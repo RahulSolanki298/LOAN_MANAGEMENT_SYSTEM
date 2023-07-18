@@ -17,10 +17,10 @@
                         Apply Date
                     </td>
                     <th>
-                        @Html.DisplayNameFor(model => model.UserId)
+                        @Html.DisplayNameFor(model => model.CustomerName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.BranchId)
+                        @Html.DisplayNameFor(model => model.BranchName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.LoanApplyAmount)
@@ -42,13 +42,13 @@
                             @Html.DisplayFor(modelItem => item.LoanAccNo)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LoanApplyAmountDate)
+                            @Html.DisplayFor(modelItem => @item.LoanApplyAmountDate, "{0:dd/MM/yyyy}", new { style = "display:inline;" })
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.UserId)
+                            @Html.DisplayFor(modelItem => item.CustomerName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.BranchId)
+                            @Html.DisplayFor(modelItem => item.BranchName)
                         </td>
 
                         <td>

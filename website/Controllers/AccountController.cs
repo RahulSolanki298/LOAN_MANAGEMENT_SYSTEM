@@ -128,7 +128,7 @@ namespace website.Controllers
 
         private string sendMail(string to, int otp)
         {
-            string from= "singhmutualnidhilimited@gmail.com";
+            string from = "singhmutualnidhilimited@gmail.com";
             using (MailMessage mail = new MailMessage())
             {
                 string Body = $"<h1>OTP:{otp}</h1>";
@@ -156,5 +156,6 @@ namespace website.Controllers
             Session.Abandon();
             return View();
         }
+
     }
 }

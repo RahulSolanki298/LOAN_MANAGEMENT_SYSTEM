@@ -42,7 +42,8 @@
                             @Html.DisplayFor(modelItem => item.LoanAccNo)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LoanApplyAmountDate)
+                            
+                            @Html.DisplayFor(modelItem => @item.LoanApplyAmountDate, "{0:dd/MM/yyyy}", new { style = "display:inline;" })
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CustomerName)

@@ -35,6 +35,19 @@ namespace website.Repository
             return branch;
         }
 
+        public CompanyBranchDetail GetBranchByName(string branchName)
+        {
+            connection();
+            con.Open();
+
+            var branch = SqlMapper.Query<CompanyBranchDetail>(
+                              con, $"select * from CompanyBranchDetails where Title='{branchName}'").FirstOrDefault();
+
+            con.Close();
+
+            return branch;
+        }
+
         public List<CompanyBranchDetail> GetBranchList()
         {
             connection();
@@ -110,6 +123,16 @@ namespace website.Repository
             con.Open();
             var hmac = new HMACSHA512();
 
+
+            var existAdmin= SqlMapper.Query<BranchAdminRegistrationDTO>(
+                              con, $"select * from AppUser where EmailId='{applicationUserDTO.EmailId}' or MobileNo='{applicationUserDTO.MobileNo}'").FirstOrDefault();
+
+            if (existAdmin == null)
+            {
+                return false;
+            }
+
+
             if (applicationUserDTO.Id == 0)
             {
                 applicationUserDTO.Password = applicationUserDTO.FirstName + "@" + DateTime.Now.Year.ToString();
@@ -121,7 +144,7 @@ namespace website.Repository
 
             var param = new DynamicParameters();
             param.Add("@Id", applicationUserDTO.Id > 0 ? applicationUserDTO.Id : 0);
-            param.Add("@UserName", applicationUserDTO.UserName);
+            param.Add("@UserName", applicationUserDTO.EmailId);
             param.Add("@FirstName", applicationUserDTO.FirstName);
             param.Add("@MiddleName", applicationUserDTO.MiddleName);
             param.Add("@LastName", applicationUserDTO.LastName);

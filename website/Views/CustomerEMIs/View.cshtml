@@ -1,0 +1,96 @@
+﻿@model IEnumerable<website.Dto.CustomerLoanCardDto>
+@using website.Helpers;
+@{
+    ViewBag.Title = "DayBook";
+    Layout = "";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            <input type="checkbox" id="checkAll" />
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OS_pricipal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Principal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaiderName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountCollected)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaidStatus)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr class="@(item.PaidStatus != true ? "":"bg-success")">
+            <td>
+                @if (item.PaidStatus == true)
+                {
+                    <input type="checkbox" checked="checked" disabled="disabled" />
+                }
+                else
+                {
+                    <input type="checkbox" class="checkbox" value="@item.Id" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OS_pricipal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Principal)
+            </td>
+            <td>
+                @if (item.PaidStatus == true)
+                {
+                    <input type="text" class="bg-info bg-info form-control" value="@(item.PaiderName)" readonly="readonly" />
+                }
+                else
+                {
+                    <input type="text" class="bg-danger bg-primary form-control" value="@(item.CustomerName)" readonly="readonly" />
+                }
+            </td>
+            <td>
+                @if (item.PaidStatus == true)
+                {
+                    <input type="text" class="bg-info bg-info form-control" value="@(item.AmountCollected)" readonly="readonly" />
+                }
+                else
+                {
+                    <input type="text" class="bg-danger bg-primary form-control" value="@(item.Inst_Amount)" readonly="readonly" />
+                }
+            </td>
+            <td>
+                @{
+                    if (item.PaidStatus == true)
+                    {
+                        <a href=""><img src="~/Content/Images/approved.png" style="width:50px;" /></a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger">Payment</button>
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>
