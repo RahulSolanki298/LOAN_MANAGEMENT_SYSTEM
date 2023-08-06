@@ -61,7 +61,7 @@
                             @Html.DisplayFor(modelItem => item.LoanIntrest)
                         </td>
                         <td>
-                            <button id="btnSectionLetter" title="Section Letter" onclick="SectionLetter(@item.Id)"><img src="~/Content/Images/chapter.png" width="15px"></img></button>
+                            <button id="btnSectionLetter" title="Section Letter" onclick="GetLoanDetails(@item.LoanNo,@item.LoanAccNo)"><img src="~/Content/Images/chapter.png" width="15px"></img></button>
                         </td>
                     </tr>
                 }

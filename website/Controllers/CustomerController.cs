@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using website.Dto;
 using website.Interface;
+using website.Repository;
 
 namespace website.Controllers
 {
@@ -10,9 +11,11 @@ namespace website.Controllers
     public class CustomerController : Controller
     {
         public readonly ICustomerRepository _customerRepo;
-        public CustomerController(ICustomerRepository customerRepo)
+        public readonly IAccountRepository _accountRepository;
+        public CustomerController(ICustomerRepository customerRepo, IAccountRepository accountRepository)
         {
             _customerRepo = customerRepo;
+            _accountRepository = accountRepository;
         }
 
         // GET: Customer
@@ -81,6 +84,37 @@ namespace website.Controllers
                 return Json($"Exp:{ex.Message}");
             }
 
+        }
+
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View("~/Views/Account/ChangePassword.cshtml", new ChangePasswordDTO());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                int userId = Convert.ToInt32(Session["UserId"].ToString());
+                model.UserId = userId;
+
+
+                bool passwordChanged = _accountRepository.ChangePassword(model);
+
+                if (passwordChanged)
+                {
+                    ViewBag.Message = "Password changed successfully.";
+                }
+                else
+                {
+                    ViewBag.Message = "Failed to change the password. Please try again.";
+                }
+            }
+
+            return View("~/Views/Account/ChangePassword.cshtml", model);
         }
     }
 }

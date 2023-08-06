@@ -177,15 +177,10 @@
                 PassRequest(id, stage);
 
             });
-
-
-
-
         });
 
         function showCustomerList() {
             $.get("@Url.Action("LoanAppliedList")", function (data) {
-                debugger;
                 $("#customerLoanList").html(data);
             });
         }
@@ -243,7 +238,7 @@
                 }
             })
         }
-
+        
         function SectionLetter(Id) {
 
             $.ajax({
@@ -256,5 +251,11 @@
             });
 
         }
+
+        
+        function GetLoanDetails(loanNo, loanAccountNo) {
+            window.location = '/LoanManager/GetEMIReportByLoanNo?loanNo=' + loanNo + '&&loanAccountNo=' + loanAccountNo;
+        }
+
     </script>
 }

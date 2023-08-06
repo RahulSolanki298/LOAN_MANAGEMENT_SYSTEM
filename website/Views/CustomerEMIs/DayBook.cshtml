@@ -10,11 +10,13 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label class="control-label col-md-2">Branch Name</label>
-            <div class="col-md-3">
-                @{
-                    if (ViewBag.RoleName == @ApplicationRole.Admin)
-                    {
+
+
+            @{
+                if (ViewBag.RoleName == @ApplicationRole.Admin)
+                {
+                    <label class="control-label col-md-2">Branch Name</label>
+                    <div class="col-md-3">
                         <select class="form-control" id="selectBranch">
                             <option value="0">Select</option>
                             @foreach (var item in ViewBag.BranchList)
@@ -22,15 +24,16 @@
                                 <option value="@item.Id">@item.Title</option>
                             }
                         </select>
-                    }
-                    else
-                    {
-                        <input type="hidden" id="selectBranch" value="@ViewBag.Branch" />
-                    }
+                    </div>
                 }
+                else
+                {
+                    <div class="col-md-3">
+                        <input type="hidden" id="selectBranch" value="@ViewBag.Branch" />
+                    </div>
+                }
+            }
 
-
-            </div>
             <div id="frmPaymentType">
                 <label class="control-label col-md-2">Paid By</label>
                 <div class="col-md-3">
@@ -55,7 +58,9 @@
 
     </div>
 
-    
+    <div class="modal fade" id="PaymentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    </div>
+
 
 </div>
 
@@ -68,13 +73,45 @@
             var selectedIds = [];
             getDayBook();
 
+            $("#selectBranch").on("change", function ()
+            {
+                var branchId =  $(this).val();
+                $.ajax({
+                    url: "@(website.Helpers.APIPath.Api_Path)CustomerEMIs/GetDaybookData?branchId="+branchId,
+                    type: "get", //send it through get method
+                    success: function (response) {
+                        $("#dtDaybook").empty();
+                        $("#dtDaybook").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                        alert(xhr);
+                    }
+                });
+
+            });
+
             $('#dtDaybook').on('click', '#checkAll', function () {
                 const isChecked = $(this).prop('checked');
                 $('.checkbox').prop('checked', isChecked);
+
+                if (isChecked == true) {
+                    $('.checkbox:checked').each(function () {
+                        selectedIds.push(parseInt($(this).val()));
+                    });
+                } else {
+                    $('.checkbox').each(function () {
+                        var checkboxValue = parseInt($(this).val());
+                        var isChecked = $(this).prop('checked');
+
+                        // Check if the checkbox is unchecked and the value is present in the array
+                        if (!isChecked && selectedIds.includes(checkboxValue)) {
+                            var indexToRemove = selectedIds.indexOf(checkboxValue);
+                            selectedIds.splice(indexToRemove, 1);
+                        }
+                    });
+                }
                 toggleSubmitButton(isChecked);
-                $('.checkbox:checked').each(function () {
-                    selectedIds.push(parseInt($(this).val()));
-                });
             });
 
             $('#dtDaybook').on('click',".checkbox", function () {
@@ -98,10 +135,44 @@
                 e.preventDefault();
                 const paidBy = $('#PaymentType').val();
 
+                if (paidBy != null) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("SaveSelectedItems", "CustomerEMIs")',
+                        data: { selectedIds: selectedIds, paidBy: paidBy },
+                        success: function (data) {
+                            alert(data);
+                            window.location.reload();
+                        },
+                        error: function () {
+                            alert('Error occurred while saving data.');
+                        }
+                    });
+                } else {
+                    alert("Please select payment type.");
+                }
+            });
+
+            $("#PaymentModal").on("click", "#btnSubmit", function ()
+            {
+                var id = $("#Id").val();
+                var loanNo = $("#loanNo").val();
+                var paiderName = $("#paiderName").val();
+                var paymentType = $("#paymentType").val();
+                var amount = $("#amount").val();
+
+                if (parseInt(paymentType) != 0) {
+                var loanData = {};
+                loanData.id = id;
+                loanData.loanNo = loanNo;
+                loanData.paiderName = paiderName;
+                loanData.paidBy = paymentType;
+                loanData.amountCollected = amount;
+
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("SaveSelectedItems", "CustomerEMIs")',
-                    data: { selectedIds: selectedIds, paidBy: paidBy },
+                    url: '@Url.Action("SubmitCustomPayment", "CustomerEMIs")',
+                    data: { loanData: loanData },
                     success: function (data) {
                         alert(data);
                         window.location.reload();
@@ -110,7 +181,12 @@
                         alert('Error occurred while saving data.');
                     }
                 });
+                } else {
+                    alert('Please select payment type.');
+                }
+
             });
+
 
             function toggleSubmitButton(isChecked) {
                 if (isChecked) {
@@ -125,26 +201,68 @@
                     }
                 }
             }
+
+
         });
 
         function getDayBook()
         {
-            debugger;;
             var branchId =  $("#selectBranch").val();
                 $.ajax({
                     url: "@(website.Helpers.APIPath.Api_Path)CustomerEMIs/GetDaybookData?branchId="+branchId,
-                    type: "get", //send it through get method
+                    type: "get",
                     success: function (response) {
                         $("#dtDaybook").empty();
                         $("#dtDaybook").html(response);
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    }
+                });
+            }
+
+        function GetPayment(id) {
+            debugger;
+             $.ajax({
+                    url: "@(website.Helpers.APIPath.Api_Path)CustomerEMIs/OtherWayForPayment?id="+id,
+                    type: "get", //send it through get method
+                 success: function (response) {
+                        $("#PaymentModal").empty();
+                         $("#PaymentModal").html(response);
+                         $("#PaymentModal").modal("show");
+
                     },
                     error: function (xhr) {
                         //Do Something to handle error
                         alert(xhr);
                     }
                 });
-            }
+        }
 
+        function GetPaymentDetails(id) {
+            $.ajax({
+                url: "@(website.Helpers.APIPath.Api_Path)CustomerEMIs/OtherWayForPayment?id=" + id,
+                type: "get",
+                dataType: "html",
+                success: function (response) {
+                            //$("#PaymentModal").empty();
+                            $("#PaymentModal").html(response);
+                            $("#PaymentModal").modal("show");
+                            $("#PaymentModal #btnSubmit").attr("style", "display:none;")
+                            $("#PaymentModal #txtTitle").text("Payment Details");
+
+                             $("#PaymentModal #RepaymentDate").prop("disabled","disabled");
+                    $("#PaymentModal #paiderName").prop("disabled", "disabled");
+                    $("#PaymentModal #paymentType").prop("disabled", "disabled");
+                    $("#PaymentModal #amount").prop("disabled", "disabled");
+
+
+                },
+                error: function (xhr) {
+                    console.error("Error occurred during AJAX call:", xhr);
+                }
+            });
+        }
     </script>
 
 }

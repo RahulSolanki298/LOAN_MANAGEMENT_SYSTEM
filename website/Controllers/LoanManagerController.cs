@@ -227,6 +227,16 @@ namespace website.Controllers
             return Json($"Customer({result}) loan has been passed.");
         }
 
+        [HttpGet]
+        public ActionResult GetEMIReportByLoanNo(string loanNo,string loanAccountNo) 
+        {
+            LoanCardDetails loanCardDetails = new LoanCardDetails();
+
+            loanCardDetails = _customerLoanRepo.GetCardWithLoanNo(loanNo,loanAccountNo);
+
+            return View(loanCardDetails);
+        }
+
         private string GenerateLoanNo()
         {
             var random = new Random();

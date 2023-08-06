@@ -45,6 +45,7 @@ namespace website.Controllers
                     Session["RoleName"] = response.RoleName;
                     Session["BranchId"] = response.BranchId;
                     Session["BranchName"] = response.BranchName;
+                    //Session["BranchName"] = response.BranchName;
 
                     if (response.RoleName != "Admin" && response.RoleName != "BranchAdmin")
                     {
@@ -55,7 +56,7 @@ namespace website.Controllers
                     int Otp = random.Next(1000, 9999);
                     Session["OTP"] = Otp;
 
-                    //var resp=sendMail(response.EmailId, Otp);
+                    var resp=sendMail(response.EmailId, Otp);
 
                     //string destinationAddr = "91" + response.MobileNo;
                     //string message = "Your OTP Number Is :" + Otp;
@@ -141,7 +142,7 @@ namespace website.Controllers
 
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
-                    smtp.Credentials = new NetworkCredential(from, "@Ruhi5151");
+                    smtp.Credentials = new NetworkCredential(from, "grgejgcvxswbooqo");
                     smtp.EnableSsl = true;
                     smtp.Send(mail);
                 }

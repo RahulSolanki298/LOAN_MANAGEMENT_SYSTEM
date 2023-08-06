@@ -48,6 +48,17 @@
 
 @section Scripts
     {
+
+    <!-- Bootstrap -->
+    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' media="screen" />
+    <!-- Bootstrap -->
+    <!-- Bootstrap DatePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <!-- Bootstrap DatePicker -->
+
     <script type="text/javascript">
         $(document).ready(function () {
              showCustomerRegistion();
@@ -62,6 +73,10 @@
                         $("#btnAccountDetails").removeClass("btn-primary");
                         $("#btnPDForm").addClass("btn-primary");
                         $("#customerForm").html(response);
+
+                        $('#customerForm #birthDate').datepicker({
+                            format: "dd/mm/yyyy"
+                        });
                     },
                     error: function (xhr) {
                         //Do Something to handle error
@@ -251,7 +266,7 @@
                 error["Gender"] = false;
             }
 
-            if (data.birthDate == "" || data.birthDate == null || data.birthDate == undefined) {
+            if (data.DateOfBirth == "" || data.DateOfBirth == null || data.DateOfBirth == undefined) {
                 $("#errbirthDate").text("Please enter birthdate.");
                 error["BirthDate"] = true;
             } else {
@@ -259,7 +274,7 @@
                 error["BirthDate"] = false;
             }
 
-            if (data.mobileNo == "" || data.mobileNo == null || data.mobileNo == undefined) {
+            if (data.MobileNo == "" || data.MobileNo == null || data.MobileNo == undefined) {
                 $("#errMobileNo").text("Please enter mobile no.");
                 error["MobileNo"] = true;
             } else {
@@ -267,7 +282,7 @@
                 error["MobileNo"] = false;
             }
 
-            if (data.emailId == "" || data.emailId == null || data.mobileNo == undefined) {
+            if (data.EmailId == "" || data.EmailId == null || data.EmailId == undefined) {
                 $("#errEmailId").text("Please enter email.");
                 error["EmailId"] = true;
             } else {

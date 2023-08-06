@@ -16,6 +16,13 @@ namespace website.Interface
 
         bool UpdateLoanStatus(int id, string status);
 
-        string SaveEMIForMultipleUser(List<int> selectedIds, string paidBy, int branchId, string loginUserRole);
+        string SaveEMIForMultipleUser(List<int> selectedIds, string paidBy, int branchId, string loginUserRole,int userId);
+
+        LoanCardDetails GetCardWithLoanNo(string loanNo,string loanAccountNo);
+
+        CustomerLoanCardDto getLoanDaywise(int id);
+
+
+        bool CustomEMIPaid(CustomerLoanCardDto loanData);
     }
 }

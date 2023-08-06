@@ -107,10 +107,6 @@ namespace website.Controllers
             if (userId > 0)
             {
                 Response = _empRepo.GetEmployeeAddress(userId);
-                if (Response == null)
-                {
-                    Response.UserId = userId;
-                }
 
                 return View("~/Views/EmployeeRegistration/CreateAddressDetails.cshtml", Response);
             }

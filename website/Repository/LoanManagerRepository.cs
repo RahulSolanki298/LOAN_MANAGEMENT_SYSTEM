@@ -186,7 +186,7 @@ namespace website.Repository
             return loanData;
         }
 
-        public string SaveEMIForMultipleUser(List<int> selectedIds, string paidBy, int branchId, string loginUserRole)
+        public string SaveEMIForMultipleUser(List<int> selectedIds, string paidBy, int branchId, string loginUserRole, int userId)
         {
             try
             {
@@ -199,10 +199,19 @@ namespace website.Repository
 
                 for (int i = 0; i < selectedIds.Count; i++)
                 {
-                    var loanDT = DataList.Where(x=>x.Id == selectedIds[i]).FirstOrDefault();
+                    var loanDT = DataList.Where(x => x.Id == selectedIds[i]).FirstOrDefault();
 
-                    string sqlQuery = $"update CustomerLoanCard set PaiderName='{loanDT.CustomerName}',AmountCollected='{loanDT.Inst_Amount}',PaidStatus='1',PaidBy='{paidBy}' where Id ={loanDT.Id}";
+                    string sqlQuery = $"update CustomerLoanCard set PaiderName='{loanDT.CustomerName}',AmountCollected='{loanDT.Inst_Amount}',PaidStatus='1',PaidBy='{paidBy}',EntryBy='{userId}',CreatedBy='{userId}',EntryDate='{DateTime.Now}',CreatedDate='{DateTime.Now    }' where Id ={loanDT.Id}";
                     con.Execute(sqlQuery);
+
+                    var TotalReceivedAmt = SqlMapper.Query<CustomerLoanManagerDTO>(con, $"select * from CustomerLoanManager where LoanNo={loanDT.LoanNo}").FirstOrDefault();
+
+                    if (TotalReceivedAmt != null)
+                    {
+                        string sqlQuery2 = $"update CustomerLoanManager set ReceivedAmount='{TotalReceivedAmt.ReceivedAmount + loanDT.Inst_Amount}' where LoanNo={loanDT.LoanNo}";
+                        con.Execute(sqlQuery2);
+                    }
+
                 }
 
                 con.Close();
@@ -213,6 +222,69 @@ namespace website.Repository
             {
 
                 return $"Exeption:{ex.Message}";
+            }
+        }
+
+        public LoanCardDetails GetCardWithLoanNo(string loanNo, string loanAccountNo)
+        {
+            connection();
+            con.Open();
+
+            LoanCardDetails loanCardDetails = new LoanCardDetails();
+
+            var parameters = new { LoanNo = loanNo, LoanAccNo = loanAccountNo };
+
+            using (var multi = con.QueryMultiple("getCustomerEMICardWithLoanNo", parameters, commandType: CommandType.StoredProcedure))
+            {
+                loanCardDetails.CustomerCardInfo = multi.Read<CustomerCardInfo>().FirstOrDefault();
+                loanCardDetails.AddressMaster = multi.Read<AddressMasterDto>().FirstOrDefault();
+                loanCardDetails.LoanCardEMIs = multi.Read<CustomerLoanCardDto>().OrderBy(x => x.RepaymentDate).ToList();
+
+                return loanCardDetails;
+            }
+        }
+
+        public CustomerLoanCardDto getLoanDaywise(int id)
+        {
+            connection();
+
+            con.Open();
+            var loanData = SqlMapper.Query<CustomerLoanCardDto>(
+                             con, $"select clm.*,ac.FirstName +' '+ac.LastName as CustomerName from CustomerLoanCard clm " +
+                            $"inner join ApplicationCustomer ac on clm.LoanAccNo =ac.LoanAppAccountNo " +
+                            $"where clm.Id={id}").FirstOrDefault();
+
+            con.Close();
+
+            return loanData;
+
+        }
+
+        public bool CustomEMIPaid(CustomerLoanCardDto loanData)
+        {
+            try
+            {
+                connection();
+                con.Open();
+
+                string sqlQuery = $"update CustomerLoanCard set RepaymentDate='{loanData.RepaymentDate}',PaiderName='{loanData.PaiderName}',AmountCollected='{loanData.AmountCollected}',PaidStatus='1',PaidBy='{loanData.PaidBy}',EntryBy='{loanData.EntryBy}',EntryDate='{loanData.EntryDate}' where Id ={loanData.Id}";
+                con.Execute(sqlQuery);
+
+                var manageLoan = SqlMapper.Query<CustomerLoanManagerDTO>(
+                            con, $"select * from CustomerLoanManager where LoanNo ='{loanData.LoanNo}'").FirstOrDefault();
+
+                var RecAmt=  manageLoan.ReceivedAmount + loanData.AmountCollected;
+
+                sqlQuery = $"update CustomerLoanManager set ReceivedAmount='{RecAmt}' where LoanNo ='{loanData.LoanNo}'";
+                con.Execute(sqlQuery);
+
+                con.Close();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

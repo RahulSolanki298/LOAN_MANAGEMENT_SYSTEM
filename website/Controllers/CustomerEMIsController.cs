@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using website.Dto;
 using website.Helpers;
 using website.Interface;
 
@@ -45,7 +46,7 @@ namespace website.Controllers
         public ActionResult DayBook()
         {
             int userId = Convert.ToInt32(Session["UserId"].ToString());
-            var branchId = 0;   
+            var branchId = 0;
             if (Session["BranchId"] != null)
             {
                 branchId = Convert.ToInt32(Session["BranchId"].ToString());
@@ -57,7 +58,7 @@ namespace website.Controllers
             return View();
         }
 
-        public ActionResult GetDaybookData(int? branchId=0)
+        public ActionResult GetDaybookData(int? branchId = 0)
         {
             int userId = Convert.ToInt32(Session["UserId"].ToString());
             string roleName = Session["RoleName"].ToString();
@@ -67,6 +68,13 @@ namespace website.Controllers
             }
 
             var response = _customerLoanRepo.GetLoanReceableDayBook(userId, (int)branchId, LoanStages.Active, roleName);
+
+            var result = new List<CustomerLoanCardDto>();
+            if (branchId > 0)
+            {
+                result = response.Where(x => x.BranchId == branchId).ToList();
+                return View("~/Views/CustomerEMIs/View.cshtml", result);
+            }
 
             return View("~/Views/CustomerEMIs/View.cshtml", response);
         }
@@ -82,7 +90,35 @@ namespace website.Controllers
             }
             string roleName = Session["RoleName"].ToString();
 
-            var response =_customerLoanRepo.SaveEMIForMultipleUser(selectedIds, paidBy,branchId,roleName);
+            var response = _customerLoanRepo.SaveEMIForMultipleUser(selectedIds, paidBy, branchId, roleName, userId);
+
+            return Json(response);
+        }
+
+        [HttpGet]
+        public ActionResult OtherWayForPayment(int id)
+        {
+            var result = _customerLoanRepo.getLoanDaywise(id);
+
+            return View("~/Views/CustomerEMIs/CustomerPayment.cshtml", result);
+        }
+
+        [HttpPost]
+        public ActionResult SubmitCustomPayment(CustomerLoanCardDto loanData)
+        {
+            var response = "";
+            int userId = Convert.ToInt32(Session["UserId"].ToString());
+            loanData.EntryBy = userId;
+            loanData.EntryDate = loanData.RepaymentDate;
+            var result = _customerLoanRepo.CustomEMIPaid(loanData);
+            if (result == true)
+            {
+                response = "EMI added successfully.";
+            }
+            else
+            {
+                response = "Something is wrong.";
+            }
 
             return Json(response);
         }

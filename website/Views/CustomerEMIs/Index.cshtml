@@ -5,71 +5,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Receivable
+    </h1>
+</section>
+<div class="row">
+    <div class="col-xs-12">
+        <section class="content">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Customer
+                    </th>
+                    <th>
+                        Branch
+                    </th>
+                    <th>
+                        Loan Amount
+                    </th>
+                    <th>
+                        Loan Amount and Intrest
+                    </th>
+                    <th>
+                        Received Amount
+                    </th>
+                    <th>Action</th>
+                </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            Date
-        </th>
-        <th>
-            Customer
-        </th>
-        <th>
-            Branch
-        </th>
-        <th>
-            Loan Amount
-        </th>
-        <th>
-            Loan & intrest
-        </th>
-        <th>
-            No of Days
-        </th>
-        <th>
-            Intrest (%)
-        </th>
-        <th>
-            EMI
-        </th>
-        <th>Action</th>
-    </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SectionAmountDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BranchName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SectionAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanNetAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReceivedAmount)
+                        </td>
+                        <td>
+                            <button id="btnSectionLetter" title="Section Letter" onclick="GetLoanDetails(@item.LoanNo,@item.LoanAccNo)"><img src="~/Content/Images/chapter.png" width="15px"></img></button>
+                        </td>
+                    </tr>
+                }
 
-    @foreach (var item in Model)
+            </table>
+        </section>
+    </div>
+</div>
+@section Scripts
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SectionAmountDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BranchName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SectionAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanNetAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NoOfDays)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanIntrest)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanEMI)
-            </td>
-            <td>
-                @Html.ActionLink("Show loan card", "Edit", new { id = item.Id })
-            </td>
-        </tr>
-    }
-
-</table>
+    <script type="text/javascript">
+        function GetLoanDetails(loanNo, loanAccountNo) {
+            window.location = '/LoanManager/GetEMIReportByLoanNo?loanNo=' + loanNo + '&&loanAccountNo=' + loanAccountNo;
+        }
+    </script>
+}

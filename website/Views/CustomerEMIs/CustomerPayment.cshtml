@@ -1,0 +1,81 @@
+﻿@model website.Dto.CustomerLoanCardDto
+@using website.Helpers
+
+@{
+    ViewBag.Title = "DayBook";
+    Layout = "";
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form>
+            <div class="modal-header">
+                <h4 class="modal-title" id="txtTitle">Custom Payment</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <input type="hidden" id="Id" value="@(Model != null ? Model.Id : 0)" />
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Date</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control datepicker" name="RepaymentDate" id="RepaymentDate" value="@(Model.RepaymentDate > DateTime.Now ?Model.RepaymentDate.Value.ToString("dd-MM-yyyy"):DateTime.Now.ToString("dd-MM-yyyy"))" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Loan No</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="loanNo" id="loanNo" value="@(Model != null?Model.LoanNo:null)" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Paider Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="paiderName" id="paiderName" value="@(Model != null ? Model.CustomerName : "")" />
+                            <span id="errPaiderName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Payement Type</label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="paymentType">
+                                <option value="0">Select</option>
+                                <option value="@PaymentType.CASH" @(Model.PaidBy == PaymentType.CASH ? "selected" : "")>@PaymentType.CASH</option>
+                                <option value="@PaymentType.GPAY" @(Model.PaidBy == PaymentType.GPAY ? "selected" : "")>@PaymentType.GPAY</option>
+                                <option value="@PaymentType.PhonePay" @(Model.PaidBy == PaymentType.PhonePay ? "selected" : "")>@PaymentType.PhonePay</option>
+                                <option value="@PaymentType.PayTM" @(Model.PaidBy == PaymentType.PayTM ? "selected" : "")>@PaymentType.PayTM</option>
+                                <option value="@PaymentType.WhatsAppPay" @(Model.PaidBy == PaymentType.WhatsAppPay ? "selected" : "")>@PaymentType.WhatsAppPay</option>
+                            </select>
+                            <span id="errPaymentType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Amount</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="amount" id="amount" value="@(Model.AmountCollected != null?Model.AmountCollected:Model.Inst_Amount)" />
+                            <span id="errAmount" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">Save changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $("#RepaymentDate").datepicker({
+            dateFormat: "dd-MM-yyyy",
+            changeMonth: true,
+            changeYear: true
+            // You can add more options as per your requirements, e.g., minDate, maxDate, etc.
+        });
+    </script>
+}

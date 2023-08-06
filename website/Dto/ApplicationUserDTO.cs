@@ -31,6 +31,7 @@ namespace website.Interface
         public string BranchName { get; set; }
         public string RoleName { get; set; }
         public string LoanAppAccountNo { get; set; }
+        public string ProfileImgPath { get; set; }
         public bool? IsActive { get; set; }
     }
 }

@@ -41,6 +41,8 @@ namespace website.Dto
         public string NoOfMonths { get; set; }
         public string NoOfYears { get; set; }
         public decimal? LoanIntrest { get; set; }
+
+        public decimal? ReceivedAmount { get; set; }
         public string LoanAccNo { get; set; }
         public string LoanNo { get; set; }
 
